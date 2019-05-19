@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Select title to add copy for</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h3>Select a title</h3>
+
+    <form th:object="${selected}" method="POST" th:action="@{/search_add_copy/display_search_results/add_selected}">
+        <fieldset>
+            <legend>Titles Found</legend>
+            <ul>
+                <li th:each="title : ${titles}">
+                    <input type="radio" th:value="${title.name}" />
+                    <label th:for="${title.id}" th:text="${title.name}"></label>
+                </li>
+                </select>
+            </ul>
+        </fieldset>
+        <p><input type="submit" value="Select Title" /> <input type="reset" value="Reset" /></p>
+    </form>
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

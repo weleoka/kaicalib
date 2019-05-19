@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Search or a title</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h1>Search a title</h1>
+
+    <form method="POST" th:action="@{/add_copy_form}" th:object="${command}">
+
+        <a th:href="@{/add_copy_form}" id="another">Search another title</a><br/>
+
+        <h3>Search for a title to add new copies of</h3>
+        <p>Title name: <input type="text" th:field="*{titleSearchString}" /></p>
+
+        <input type="submit" value="Search title"/>
+    </form>
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

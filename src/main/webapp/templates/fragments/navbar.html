@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+<div class="masthead" th:fragment="navbar">
+    <h3 class="muted">Kaica_Lib Online!</h3>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li class="active"><a th:href="@{/welcome}">Home</a></li>
+                    <li><a th:href="@{/login}">Login</a></li>
+                    <li><a th:href="@{/patron/view_loans}">Loans</a></li>
+                    <li><a th:href="@{/patron/view_reservations}">Reservations</a></li>
+                    <li><a th:href="@{/patron/patron_search}">Search</a></li>
+                    <li><a th:href="@{/patron/copy_scan}">Scan</a></li>
+                </ul>
+            </div>
+        </div>
+    </div><!-- /.navbar -->
+</div>
+

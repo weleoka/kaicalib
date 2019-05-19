@@ -1,0 +1,246 @@
+# To do in properties
+# - persistence units, one 'default' for business and another for users db.
+# - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+# - consider setting the 'logging.level.web' property to 'DEBUG'
+# - Use H2 or HSQL datasources for development. It seems the DDL has to be present for them to build?
+# todo Can't access the /console for H2 database...
+# todo Why is logging not playing the game? Logger levels can be adjusted but that's it in IDE. Commandline different again.
+# todo Implemente the multiple datasources method described here:
+#   https://therealdanvega.com/blog/2017/06/26/spring-boot-configuration-using-yaml
+#
+
+---
+
+server:
+  port: 8080
+
+spring:
+
+    # ===============================
+    # = PROFILES configurations
+    # ===============================
+    profiles:
+        active: dev
+        #active: test
+        #active: prod
+        #include: datasource-mysql
+        #include: datasource-hsql
+        #include: datasource-h2
+        include:
+            - datasource-mysql
+            #- datasource-h2
+            - datasource-accounts-mysql
+
+---
+spring:
+    profiles: dev
+
+
+    application:
+        name: kaicalib
+
+    # ===============================
+    # = OTHER SPRING configurations
+    # ===============================
+    mvc:
+        favicon.enabled: true
+    main:
+        banner-mode: 'off' # quoted becase off maps to false in YML. Othe possible is CONSOLE or LOG.
+        #allow-bean-definition-overriding: true
+    output:
+        ansi:
+            enabled: ALWAYS
+
+    # Lets locale enabled messages setting
+    messages:
+        use-code-as-default-message: true
+        fallback-to-system-locale: true
+
+
+    # ===============================
+    # = JPA configurations
+    # ===============================
+    data:
+        jpa:
+            repositories:
+                #bootstrap-mode: LAZY
+
+    jpa:
+        show-sql: true
+        open-in-view: false # Recommended for production
+
+
+
+
+        # ===============================
+        # = HIBERNATE configurations
+        # ===============================
+
+        properties:
+            #hibernate.id.new_generator_mappings: true
+            #hibernate.connection.provider_disables_autocommit: true
+            #hibernate.cache.use_second_level_cache: true
+            #hibernate.cache.use_query_cache: false
+            #hibernate.generate_statistics: true
+            hibernate.jdbc.time_zone: UTC
+
+        hibernate:
+            show-sql: true
+            use_sql_comments: true
+            format_sql: true
+            # create-drop, validate if schema is made by schema.sql for example. create-drop is default with in-memory db.
+            #ddl-auto: update # Set at datasource level instead.
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+
+    # ===============================
+    # = DEVTOOLS configurations
+    # ===============================
+    devtools:
+        restart:
+            enabled: true
+            exclude: static/**,templates/**
+            # Excludes changes to webbapp files as they reload without a restart.
+        livereload:
+            enabled: true
+        add-properties: false
+
+
+
+    # ===============================
+    # = THYMELEAF configurations
+    # ===============================
+    thymeleaf:
+        prefix: file:./src/main/webapp/templates/
+        suffix: .html
+        mode: HTML
+        cache: false
+
+# ===============================
+# = Logging configurations for DEV
+# ===============================
+# Logging groups can be created for switching batches of loggers.
+# https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html#boot-features-custom-log-groups
+logging:
+    #file: logs/dev_app.log
+    level:
+        root: INFO
+        org.springframework.web: WARN
+        org.springframework.security: WARN
+        org.springframework.security.web: DEBUG
+        org.hibernate: WARN
+        com.datasources: DEBUG
+    pattern:
+        console: "%d{HH:mm:ss.SSS} %highlight(%-5level) [%-20.30logger{10}] - %msg%n"
+        #console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%-40.40logger{10}] - %msg%n"
+        #console: "%-5level %logger : %msg%n"
+        #console: "%d %-5level %logger : %msg%n"
+        #file: "%d %-5level [%thread] %logger : %msg%n"
+
+
+
+
+
+
+# ======================== DATASOURCES ===================
+
+---
+spring:
+    profiles: datasource-hsql
+datasource:
+    name: HSQL-datasource
+    #shutdown=true can be used in the url to disable the database's automatic shutdown.
+    #url: jdbc:hsqldb:file:./hsqldb_data/testdb
+    url: jdbc:hsqldb:mem:bibsys_db
+    platform: all # all is default for data.sql and schema.sql files for loading.
+jpa:
+    # database-platform: MYSQL # Can be autodetected. Sets an ENUM for DB jpa type.
+    properties:
+        hibernate.dialect: org.hibernate.dialect.HSQLDialect
+    hibernate:
+        ddl-auto: create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+
+
+
+---
+spring:
+    profiles: datasource-h2
+    jpa:
+        properties:
+            hibernate.dialect: org.hibernate.dialect.H2Dialect
+            hibernate.ddl-auto: update
+        hibernate:
+            ddl-auto: create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+    h2:
+        console: # Allows http://localhost:8080/console as a dbms tool
+            enabled: true
+            path: /console  # default is /h2-console
+            settings:
+                trace: false
+                web-allow-others: false
+
+datasource:
+    username: auser
+    password: apass
+    name: H2-datasource
+    url: jdbc:h2:mem:bibsys_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #initialize: true # Reading of schema.sql and data.sql files.
+    #url: jdbc:h2:mem:bibsys_db;DB_CLOSE_DELAY=-1;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS calendar
+    #url: jdbc:h2:file:~/h2/app_db;
+
+    # https://h2database.com/html/features.html#connection_modes
+    # DB_CLOSE_DELAY=-1 # h2 will keep its content as long as the vm lives.
+    # DB_CLOSE_ON_EXIT=FALSE
+
+    #platform: h2 # Modifies suffix (such as schema-${platform}.sql or data-${platform}.sql)
+    # schema.sql hibernate creates the required schema but this can be useful
+    # todo How useful, how much time is saved by running DDL from file than for hibernate to generate it at runtime?
+    # note spring.datasource.initialization-mode=always is default if in-memory DB is used.
+
+
+
+---
+spring:
+    profiles: datasource-mysql
+    jpa:
+        properties:
+            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+            #hibernate.default_schema: PUBLIC
+        hibernate:
+            ddl-auto: update
+
+datasource:
+    username: bibsys_db_user
+    password: enter112
+    name: MariaDB-datasource
+    url: jdbc:mysql://localhost:3306/bibsys_db?useLegacyDatetimeCode=false&serverTimezone=UTC
+
+
+
+
+---
+# SECONDARY DATASOURCE using MARIADB / MYSQL
+# This separates the business and authentication domains at the persistence level.
+# todo Question: USE <database> be possible. One for accounts, one for domain but on the same SQL database server?
+spring:
+    profiles: datasource-accounts-mysql
+    jpa:
+        properties:
+            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+            #hibernate.default_schema: PUBLIC
+        hibernate:
+            ddl-auto: update
+            #ddl-auto: update # create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+            #naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+
+accounts-datasource:
+    username: bibsys_db_user
+    password: enter112
+    name: MariaDB-accounts-datasource
+    url: jdbc:mysql://localhost:3306/bibsys_accounts_db?useLegacyDatetimeCode=false&serverTimezone=UTC
+    #platform: account # data-account.sql and schema-account.sql for preloading
+    initialization-mode: always
+

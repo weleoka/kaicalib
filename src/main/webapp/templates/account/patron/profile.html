@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Patron Profile/Home Page</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <div class="alert alert-success" role="alert" th:if="${uri}" th:utext="${uri}"></div>
+    <div class="alert alert-success" role="alert" th:if="${patron}" th:utext="${patron}"></div>
+    <div class="alert alert-success" role="alert" th:if="${roles}" th:utext="${roles}"></div>
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-success"><i class="fa fa-patron-plus"></i> Logout</button>
+    </form>
+
+
+    <div class="gap-10"></div>
+
+    <form method="GET" th:action="@{/patron/details}">
+        <input type="submit" value="View User Details"/>
+    </form>
+
+    <div class="gap-10"></div>
+
+    <form method="GET" th:action="@{/patron/view_loans}">
+        <input type="submit" value="View My Active Loans"/>
+    </form>
+
+    <div class="gap-10"></div>
+
+    <form method="GET" th:action="@{/patron/view_reservations}">
+        <input disabled="disabled" type="submit" value="View My Reservations"/>
+    </form>
+
+    <div class="gap-10"></div>
+
+    <form method="GET" th:action="@{/patron/patron_search}">
+        <input type="submit" value="Search Titles"/>
+    </form>
+
+    <div class="gap-10"></div>
+
+    <form method="GET" th:action="@{/patron/copy_scan}">
+        <input disabled="disabled" type="submit" value="Book Scanner"/>
+    </form>
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

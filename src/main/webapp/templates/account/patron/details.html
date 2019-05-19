@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Profile Details Page</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <p>Current auth user: </p>
+    <p th:if="${authUser}" th:text="${authUser.username}"></p>
+
+    <h3>All users</h3>
+    <table th:if="${not #lists.isEmpty(allUsers)}">
+        <tr>
+            <th>User Id</th>
+            <th>Username</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Adress</th>
+        </tr>
+        <tr th:each="user : ${allUsers}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.firstname}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.address}"></td>
+        </tr>
+    </table>
+
+    <div class="gap-10"></div>
+
+    <form method="PUT" th:action="@{/patron/update}">
+        <input type="submit" value="Edit my details"/>
+    </form>
+
+    <div>
+        <a href="profile.html" th:href="@{/patron/profile}">Return to home</a>
+    </div>
+
+
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

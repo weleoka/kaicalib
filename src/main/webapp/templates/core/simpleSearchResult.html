@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Select title to add copy for</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h3>Found the following titles matching your query</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th> Title </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${titles.empty}">
+            <td colspan="2"> No Titles match your search </td>
+        </tr>
+        <tr th:each="title : ${titles}">
+            <td><span th:text="${title.name}"> Title </span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

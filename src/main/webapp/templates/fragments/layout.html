@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+<head th:fragment="headerFragment">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title th:include=":: #pageTitle">Generic Layout File Title</title>
+
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/common.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    Here is all the content. Apparently footer should be in the body.... but the header not as it only
+    deals with metadata and resource loading.
+</div>
+
+<footer th:fragment="footerFragment" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="footer">
+    &copy; 2019 Bibliotessystemet - Grupp 8
+    </div>
+    <!--<script type="text/javascript" src="js/jquery-3.4.0.slim.js"></script>-->
+    <!--<script type="text/javascript" src="js/bootstrap.min.js"></script>-->
+</footer>
+</body>
+
+
+</html>
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Welcome to Kaica Library!</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h1>Welcome to Kaica Library</h1>
+    <img src="images/library.jpg">
+
+    <div>
+        <form method="GET" th:action="@{/admin/login}">
+            <input type="submit" value="Librarian Log In"/>
+        </form>
+    </div>
+
+    <div>
+        <form method="GET" th:action="@{/login}">
+            <input type="submit" value="Patron Log In"/>
+        </form>
+    </div>
+
+    <p><a th:href="@{/test}">Test if you have to log in to account</a></p>
+    <p><a th:href="@{/login}">Login</a></p>
+    <p><a th:href="@{/signup}">Signup</a></p>
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>
