@@ -14,7 +14,7 @@ public class HomeController {
 
     @RequestMapping(value = {"/", "/welcome", "/home", "/index.*"}, method = RequestMethod.GET)
     public String welcome(Model model, Principal principal) {
-        return principal != null ? "redirect:patron/profile" : "index";
+        return "index";
     }
 
     @GetMapping("/error")

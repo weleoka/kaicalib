@@ -2,22 +2,34 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       lang="en">
 
 <div class="masthead" th:fragment="navbar">
-    <h3 class="muted">Kaica_Lib Online!</h3>
+
+    <div class="header">
+        <img src="images/logo.png" alt="logo" />
+        <h1>Kaica_Lib Online!</h1>
+    </div>
+
+
     <div class="navbar">
         <div class="navbar-inner">
             <div class="container">
                 <ul class="nav">
-                    <li class="active"><a th:href="@{/welcome}">Home</a></li>
-                    <li><a th:href="@{/login}">Login</a></li>
+                    <li class="active"><a th:href="@{/}">Home</a></li>
                     <li><a th:href="@{/patron/view_loans}">Loans</a></li>
                     <li><a th:href="@{/patron/view_reservations}">Reservations</a></li>
                     <li><a th:href="@{/patron/patron_search}">Search</a></li>
                     <li><a th:href="@{/patron/copy_scan}">Scan</a></li>
+                    <li><a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
                 </ul>
             </div>
+        </div>
+        <div> Hello:
+            <span sec:authentication="name">logged-in-users-username</span>
+            <span sec:authorize="hasRole('PATRON')">(aut submit a form for testing springADMIN)</span>
         </div>
     </div><!-- /.navbar -->
 </div>

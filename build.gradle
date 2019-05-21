@@ -37,6 +37,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+    // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.4.RELEASE'
+
     // sql connection drivers
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     //runtimeOnly group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'

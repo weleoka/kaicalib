@@ -58,7 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .authorizeRequests() // Routes and resources for all
             .antMatchers(
-                "/console/**",   // todo Disable for production.
+                "/console/**", // todo Disable for production.
+                "/login/auto",               // todo Disable for production.
+                "/login/admin/auto",         // todo Disable for production.
+
                 "/test",
                 "/signup",
                 "/logout",

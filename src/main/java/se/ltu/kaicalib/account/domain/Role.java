@@ -24,4 +24,12 @@ public class Role {
         inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")})*/
     @ManyToMany(mappedBy = "roles") // i.e. the User owns the roles.
     private Set<User> userList; // todo Set? E.g. role will have only one user one time. Also more efficient for db.
+
+    public Role() {
+    }
+
+    // todo Remove for production
+    public Role(String role) {
+        this.role = role;
+    }
 }

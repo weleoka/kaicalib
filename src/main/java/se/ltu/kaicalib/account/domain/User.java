@@ -2,11 +2,11 @@ package se.ltu.kaicalib.account.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -71,9 +71,17 @@ public class User {
     )
     private Set<Role> roles;
 
-/*    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-    }*/
+    public User() {
+
+    }
+
+    // todo Remove for production. This is for autologon.
+    public User(String username, String password, Set<Role> authorities) {
+        this.username = username;
+        this.password = password;
+        this.roles = authorities;
+    }
+
     @Override
     public boolean equals(Object o) {
     if (this == o) return true;

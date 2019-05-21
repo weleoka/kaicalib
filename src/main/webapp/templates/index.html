@@ -10,24 +10,27 @@
 <div class="container">
     <div th:include="fragments/navbar :: navbar"></div>
 
-    <h1>Welcome to Kaica Library</h1>
-    <img src="images/library.jpg">
 
     <div>
-        <form method="GET" th:action="@{/admin/login}">
-            <input type="submit" value="Librarian Log In"/>
+        <h1>Welcome</h1>
+        <p>Here you can search and borrow books and films.</p>
+        <p>Create a new user and start borowing!</p>
+        <p>Please don't hack any user accounts.</p>
+    </div>
+
+    <div>
+        <form method="GET" th:action="@{/admin/login/auto}">
+            <input type="submit" value="Librarian Auto Log In"/>
         </form>
     </div>
 
     <div>
-        <form method="GET" th:action="@{/login}">
-            <input type="submit" value="Patron Log In"/>
+        <form method="GET" th:action="@{/login/auto}">
+            <input type="submit" value="Patron Auto Log In"/>
         </form>
     </div>
 
-    <p><a th:href="@{/test}">Test if you have to log in to account</a></p>
-    <p><a th:href="@{/login}">Login</a></p>
-    <p><a th:href="@{/signup}">Signup</a></p>
+    <p><a th:href="@{/test}">Test redirect depending on login status</a></p>
 </div>
 
 <div th:replace="fragments/layout :: footerFragment"></div>

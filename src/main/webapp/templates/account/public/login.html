@@ -4,30 +4,27 @@
 
 <head th:include="fragments/layout :: headerFragment">
     <title id="pageTitle">Login Page</title>
-    <!-- other elements you want to reference in your layout
-            <form th:action="@{/login}" method="post">
-            <div><label> User Name : <input type="text" name="username"/> </label></div>
-            <div><label> Password: <input type="password" name="password"/> </label></div>
-            <div><input type="submit" value="Sign In"/></div>
-        </form>
--->
 </head>
 <body>
 
 <div class="container">
     <div th:replace="fragments/navbar :: navbar"></div>
+    <div>
+        <h1>Welcome to the login page</h1>
+        <p>Here you can log in with a registered patron user.</p>
+    </div>
 
     <form class="form-horizontal" role="form" method="POST" th:action="@{/authenticate}">
         <div class="row">
             <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div th:if="${param.error}">
+            <div class="col-md-6" >
+                <div th:if="${param.error}"  class="login-notification">
                     Invalid username or password.
                 </div>
-                <div th:if="${param.logout}">
+                <div th:if="${param.logout}"  class="login-notification">
                     You have been logged out.
                 </div>
-                <div th:if="${param.warning}">
+                <div th:if="${param.warning}"  class="login-notification">
                     You have to log in to access that page.
                 </div>
                 <!--<div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"> </div>-->
@@ -72,7 +69,7 @@
             </div>
         </div>
 
-        <div class="row">
+<!--        <div class="row">
             <div class="col-md-3 field-label-responsive">
                 <label for="remember_me">.</label>
             </div>
@@ -87,16 +84,23 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i>Log in</button>
                 <p><a th:href="@{/signup}">Create new account</a></p>
+                <p><a th:href="@{/admin/login}">Librarian access</a></p>
             </div>
         </div>
     </form>
+    <div>
+        <p> - - - </p>
+        <p> P.S. administrators log in with this form as well, authorites depend on the role your user has set.</p>
+        <p>Please don't hack any user accounts.</p>
+    </div>
+
 </div>
 
 <div th:replace="fragments/layout :: footerFragment"></div>

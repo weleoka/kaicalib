@@ -9,12 +9,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import se.ltu.kaicalib.account.domain.Role;
 import se.ltu.kaicalib.account.domain.User;
 import se.ltu.kaicalib.account.service.UserServiceImpl;
 import se.ltu.kaicalib.account.utils.RoleNotValidException;
 import se.ltu.kaicalib.account.validator.UserValidator;
 
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class PublicController {
@@ -27,6 +30,28 @@ public class PublicController {
     @Autowired
     private UserValidator userValidator;
 
+
+
+    /* ==== AUTOLOGIN ROUTES ========================================= */
+    @GetMapping("admin/login/auto")
+    public String autoLoginAdmin() {
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(new Role("ADMIN"));
+
+        User user = new User("ccc", "ddd", roles);
+        userService.login(user);
+        return "redirect:/admin/profile";
+    }
+
+    @GetMapping("/login/auto")
+    public String autoLoginPatron() {
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(new Role("PATRON"));
+
+        User user = new User("aaa", "bbb", roles);
+        userService.login(user);
+        return "redirect:/patron/profile";
+    }
 
 
 
@@ -43,12 +68,16 @@ public class PublicController {
     }
 
 
-    /* ==== ADMIN LOGIN ==================================================== */
+
+    /* ==== ADMIN LOGIN ============================================== */
     @GetMapping("/admin/login")
     public String getAdminLoginPage(Principal principal) {
 
         return "error";
     }
+
+
+
 
 
 

@@ -18,10 +18,7 @@ import se.ltu.kaicalib.account.repository.UserRepository;
 import se.ltu.kaicalib.account.utils.RoleNotValidException;
 import se.ltu.kaicalib.core.domain.Patron;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -92,17 +89,31 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // todo not sure if the following auth methods belong in this service bean.
+
+    /* ============== LOGIN PROCESS ================= */
+    // todo Make it possible to have multiple different roles...for fun? Currently only allow the first role in set (no order).
+
     public void login(User user) {
         SecurityContextHolder.getContext().setAuthentication(authenticate(user));
     }
 
     private Authentication authenticate(User user) { //user.getPassword()
-        return new UsernamePasswordAuthenticationToken(user, user.getPassword(), Collections.singleton(createAuthority(user)));
+
+        return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), Collections.singleton(createAuthority(user)));
+        //return new UsernamePasswordAuthenticationToken(user, user.getPassword(), Collections.singleton(createAuthority(user)));
     }
 
     private GrantedAuthority createAuthority(User user) {
-        return new SimpleGrantedAuthority("PATRON");
+        Set<Role> roles = user.getRoles();
+        String roleStr = "DEFAULT_BUT_INVALID_ROLE";
+
+        for (Role role : roles) {
+            roleStr = role.toString();
+
+            break; // only get the first role from the set.
+        }
+
+        return new SimpleGrantedAuthority(roleStr);
     }
 
 }

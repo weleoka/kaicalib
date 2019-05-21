@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin dashboard</title>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Administrator profile page!</title>
 </head>
 <body>
 
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <div class="alert alert-success" role="alert" th:if="${uri}" th:utext="${uri}"></div>
+    <div class="alert alert-success" role="alert" th:if="${patron}" th:utext="${patron}"></div>
+    <div class="alert alert-success" role="alert" th:if="${roles}" th:utext="${roles}"></div>
+
+    <div>
+        <p>Currently disabled. No admin functionality available.</p>
+        <a th:href="@{/logout}">Log out</a>
+    </div>
+</div>
 
 
-<a th:href="@{/multipleHttpLinks}" >Back to links</a>
-
-
+<div th:replace="fragments/layout :: footerFragment"></div>
 </body>
 </html>

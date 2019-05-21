@@ -3,7 +3,7 @@
 
 /* Custom container */
 .container {
-    margin: 0 auto;
+    margin: 2em auto;
     max-width: 1000px;
 }
 .container > hr {
@@ -73,6 +73,22 @@ th {
 
 
 
+.header img {
+    float: left;
+    width: 100px;
+    height: 100px;
+}
+
+.header h1 {
+    position: relative;
+    top: 18px;
+    left: 40px;
+}
+
+.login-notification {
+    float: right;
+}
+
 
 body {
     padding-top: 40px;
@@ -122,9 +138,6 @@ body {
 .has-error {
     color: red
 }
-
-
-
 
 .form-narrow {
     max-width: 490px;
