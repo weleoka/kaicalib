@@ -74,13 +74,15 @@ public class UserServiceImpl implements UserService {
         Patron patron = new Patron(user.getUuid());
         user.setPatronUuid(patron.getUuid());
 
-        logger.debug("Created new user (ID: {}, with roles: {})", user.getUsername(), user.getRoles());
+
 
 /*        Set<Role> roles = new HashSet<>(); // multiple roles not supported yet
         roles.add(role);
         user.setRoles(roles);*/
 
         userRepository.save(user);
+
+        logger.debug("Created new user (ID: {}, with roles: {})", user.getUsername(), user.getRoles());
     }
 
     @Override

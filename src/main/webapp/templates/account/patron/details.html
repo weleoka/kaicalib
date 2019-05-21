@@ -47,3 +47,17 @@
 <div th:replace="fragments/layout :: footerFragment"></div>
 </body>
 </html>
+
+<!--
+
+The path up to the query string:
+
+${#request.requestURI}
+
+The query string:
+
+${#request.queryString}
+
+Get a specific parameter (from the query string):
+
+${#request.getParameter('size')}-->

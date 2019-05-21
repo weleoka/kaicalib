@@ -19,7 +19,7 @@ import java.security.Principal;
 @Controller
 public class PublicController {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserServiceImpl userService;
@@ -63,17 +63,19 @@ public class PublicController {
     // todo load the default user roles from application config
     // todo load strings from messages source and make locale sensitive.
     // todo hide entire registration form when success.
-    // todo check implications of new User() and how it affects the view
+    // todo check implications of new User() and how it affects the view...out of interest;
+    //  for example if by accident the old user object was set to the Model.
     @RequestMapping(value= {"/signup"}, method = RequestMethod.POST)
     public String signup(User user, BindingResult bindingResult, Model model) throws RoleNotValidException {
         String defaultRoleStr = "PATRON";
-        userValidator.validate(user, bindingResult);
+        userValidator.validateNew(user, bindingResult);
         User userExists = userService.findUserByUsername(user.getUsername());
 
         if (userExists != null) {
             logger.debug("User already exists in db {}", userExists.getUsername());
             bindingResult.rejectValue("username", "error.user", "Sorry, the username is already taken.");
         }
+
         if (bindingResult.hasErrors()) {
             return "account/public/signup";
 

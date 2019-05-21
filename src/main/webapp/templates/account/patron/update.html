@@ -15,6 +15,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"></div>
+                <div class="alert alert-warning" role="alert" th:if="${warn}" th:utext="${warn}"></div>
                 <div th:if="${msg}">
                     <p><a th:href="@{/patron/profile}">Return to profile page</a></p>
                 </div>

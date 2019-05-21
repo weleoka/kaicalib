@@ -27,7 +27,7 @@ public class HomeController {
         redirectAttributes.addAttribute("warning", "true");
         redirectAttributes.addFlashAttribute("flashAttribute", principal);
         //The advantage of using flashAttributes is that, you can add any object as a flash attribute (as it is stored in session).
-        return principal != null ? "redirect:patron/profile" : "redirect:public/login";
+        return principal != null ? "redirect:patron/profile" : "redirect:/login";
         //return principal != null ? "account/patron/profile" : "account/public/login";
     }
 }

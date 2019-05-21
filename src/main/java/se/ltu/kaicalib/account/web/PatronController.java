@@ -20,6 +20,14 @@ import se.ltu.kaicalib.account.validator.UserValidator;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+
+/**
+ * Controller handling the basic actions of what is known as
+ * a patron acording to the business rules.
+ *
+ *
+ * @author
+ */
 @Controller
 @Secured("PATRON")
 public class PatronController {
@@ -41,22 +49,47 @@ public class PatronController {
     }
 
 
+    /**
+     * Route that takes a user form and applies it
+     * to a user already in persistence.
+     *
+     * Only allows updating of the authenticated user. And not suitable for admin work.
+     *
+     * The user object has to manually merged as it is a security object and does not
+     * grant merge through object reflection.
+     *
+     * todo Move the user properties update process out from Controller class.
+     *
+     * The though is to
+     *
+     * @param userForm
+     * @param bindingResult
+     * @param model
+     * @return
+     */
     @RequestMapping(value= {"/patron/update"}, method = RequestMethod.POST)
-    public String updatePatron(User user, BindingResult bindingResult, Model model) {
-        User userExists = userService.findUserByUsername(user.getUsername()); // todo not needed but good backup safety check?
+    public String updatePatron(User userForm, BindingResult bindingResult, Model model) throws RoleNotValidException {
+        User user = getAuthUser();
+        userValidator.validateUpdate(userForm, bindingResult);
 
-        if (userExists == null) {
-            logger.error("User trying to be updated does not exist in DB {}", user.getUsername());
-            bindingResult.rejectValue("firstname", "error.user", "Sorry, the system has failed. contact and admin and make their day.");
-            return "account/public/update";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("warn", "There has been some errors in the form processing!");
 
-        } else { // todo implement checks to ensure user is not being upgraded to other role, admin for example.
-            userService.updateUser(user);
-            model.addAttribute("msg", "User has been updated successfully!");
-            model.addAttribute("user", user);
-
-            return "account/public/update";
+            return "account/patron/update";
         }
+
+        if (userForm.getFirstname() != "") user.setFirstname(userForm.getFirstname());
+        if (userForm.getLastname() != "") user.setLastname(userForm.getLastname());
+        if (userForm.getAddress() != "") user.setAddress(userForm.getAddress());
+        if (userForm.getEmail() != "") user.setEmail(userForm.getEmail());
+        if (userForm.getPassword() != "") user.setPassword(userForm.getPassword());
+
+        userService.saveUser(user, "PATRON");
+        model.addAttribute("msg", "User has been updated successfully!");
+        model.addAttribute("user", user); // todo check what this does to the model. Don't want to return pwd for example.
+
+        return "account/patron/update";
+
     }
 
 
@@ -88,3 +121,13 @@ public class PatronController {
         return userService.findUserByUsername(username);
     }
 }
+
+
+/*
+        if (userExists == null) {
+            logger.error("User trying to be updated does not exist in DB {}", user.getUsername());
+            bindingResult.rejectValue("firstname", "error.user", "Sorry, the system has failed. Contact an admin and make their day.");
+
+            return "account/patron/update";
+
+ */
