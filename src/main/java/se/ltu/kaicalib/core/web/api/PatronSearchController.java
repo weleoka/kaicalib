@@ -60,7 +60,7 @@ public class PatronSearchController {
 
         model.addAttribute("titles", titles);
 
-        return "redirect:/patron/patron_search/display_search_results";
+        return "redirect:/display_search_results";
     }
 
     @GetMapping("/display_search_results")

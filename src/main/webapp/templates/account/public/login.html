@@ -18,16 +18,7 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6" >
-                <span th:if="${param.error}"  class="alert alert-warning">
-                    Invalid username or password.
-                </span>
-                <span th:if="${param.logout}"  class="alert alert-success">
-                    You have been logged out.
-                </span>
-                <span th:if="${param.warning}"  class="alert alert-warning">
-                    You have to log in to access that page.
-                </span>
-                <!--<div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"> </div>-->
+
             </div>
         </div>
 
@@ -90,15 +81,35 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i>Log in</button>
-                <p><a th:href="@{/signup}">Create new account</a></p>
-                <p><a th:href="@{/admin/login}">Librarian access</a></p>
+                <span th:if="${param.error}"  class="alert alert-warning">
+                    Invalid username or password.
+                </span>
+                <span th:if="${param.logout}"  class="alert alert-success">
+                    You have been logged out.
+                </span>
+                <span th:if="${param.warning}"  class="alert alert-warning">
+                    You have to log in to access that page.
+                </span>
+                <!--<div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"> </div>-->
+
+
             </div>
         </div>
     </form>
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <p> - - - </p>
+            <p> P.S. administrators log in with this form as well, authorites depend on the role your user has set.</p>
+            <p>Please don't hack any user accounts.</p>
+            <p><a th:href="@{/signup}">Create new account</a></p>
+            <p><a th:href="@{/admin/login}">Librarian access</a></p>
+        </div>
+    </div>
+
     <div>
-        <p> - - - </p>
-        <p> P.S. administrators log in with this form as well, authorites depend on the role your user has set.</p>
-        <p>Please don't hack any user accounts.</p>
+
     </div>
 
 </div>
