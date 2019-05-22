@@ -96,8 +96,6 @@ public class PatronController {
     @GetMapping("/patron/details")
     public String detailsPatron(Model model) {
         model.addAttribute("authUser", getAuthUser());
-        List<User> allUsers = userService.findAllUsers();
-        model.addAttribute("allUsers", allUsers);
 
         return "account/patron/details";
     }
