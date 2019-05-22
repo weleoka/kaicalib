@@ -1,6 +1,6 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-INSERT INTO `copy` (`copy_id`, `copy_created_at`, `copy_return_date`, `status`, `uuid`, `copyType_copy_type_id`, `title_title_id`) VALUES
+INSERT INTO `Copy` (`copy_id`, `copy_created_at`, `copy_return_date`, `curr_status`, `uuid`, `copyType_copy_type_id`, `title_title_id`) VALUES
 (3, '2019-05-17', '2019-05-17', 'available', '19c87ebd-8c2a-46ad-a278-b4eb93ea562c', 4, 2),
 (5, '2019-05-17', '2019-05-17', 'available', '6e5eb0ee-d821-465f-bbc8-bd0081e2a90b', 6, 2),
 (7, '2019-05-17', '2019-05-17', 'available', '37d4cd88-c487-46b3-984b-b58eb14b3fc7', 8, 2),
@@ -15,7 +15,7 @@ INSERT INTO `copy` (`copy_id`, `copy_created_at`, `copy_return_date`, `status`, 
 (26, '2019-05-17', '2019-05-17', 'available', '0065894e-64d2-4a9b-a007-d09305abaeab', 27, 23),
 (28, '2019-05-17', '2019-05-17', 'available', 'c8167b77-4b8f-41be-b1ce-0539dd82c6f4', 29, 23);
 
-INSERT INTO `copy_type` (`type_discriminator`, `copy_type_id`, `loan_time`, `uuid`, `copy_copy_id`) VALUES
+INSERT INTO `Copy_type` (`type_discriminator`, `copy_type_id`, `loan_time`, `uuid`, `copy_copy_id`) VALUES
 ('NORMAL', 4, 4, '977eed97-d812-4614-992f-7da27ce68b7e', 3),
 ('NORMAL', 6, 4, '87815c88-0097-43cb-a9f7-2d2c38d6493a', 5),
 ('NORMAL', 8, 4, '3467d82c-243d-4c69-b219-5e1d0d7b48c9', 7),
@@ -34,18 +34,18 @@ SET SQL_SAFE_UPDATES = 0;
 UPDATE `hibernate_sequence` SET `next_val` = 30;
 SET SQL_SAFE_UPDATES = 1;
 
-INSERT INTO `patron` (`patron_id`, `createdAt`, `user_uuid`, `uuid`) VALUES
+INSERT INTO `Patron` (`patron_id`, `createdAt`, `user_uuid`, `uuid`) VALUES
 (1, '2019-05-17', '6743a289-ac08-4a6f-87df-393ba95b86cc', '9b99623c-36b7-4701-94e0-422c056c2496'),
 (2, '2019-03-17', 'd4949f00-7c1e-4521-a99e-74f30fbf193a', '571314cf-2c87-4200-a282-e0ddec913513');
 
-INSERT INTO `loan` (`id`, `createdAt`, `returnDate`, `uuid`, `copy_copy_id`, `patron_patron_id`) VALUES
+INSERT INTO `Loan` (`id`, `createdAt`, `returnDate`, `uuid`, `copy_copy_id`, `patron_patron_id`) VALUES
 (1, '2019-05-17', '2019-07-17', '19c87ebd-8c2a-46ad-a278-b4eb93ea123c', 3, 2);
 
-INSERT INTO `title` (`title_id`, `created_at`, `title_name`, `uuid`) VALUES
+INSERT INTO `Title` (`title_id`, `created_at`, `title_name`, `uuid`) VALUES
 (1, '2019-05-17', 'Java for N00bz', '1870ad2e-857a-4533-b09a-ce54e93f4b15'),
 (2, '2019-05-17', 'Failing Gracefully at Spring MVC', 'fe805f7f-414a-41a0-8139-7c362e41f6c4'),
 (23, '2019-05-17', 'Shoddy Code - And How to Write It', '46c3793a-f3cd-4d4b-8f4c-6d70da5d4376');
 
-INSERT INTO `patron_loan` (`Patron_patron_id`, `loans_id`) VALUES (2, 1);
+INSERT INTO `Patron_Loan` (`Patron_patron_id`, `loans_id`) VALUES (2, 1);
 
 SET FOREIGN_KEY_CHECKS=1;

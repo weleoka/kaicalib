@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
+import se.ltu.kaicalib.core.config.YAMLConfig;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -26,22 +27,29 @@ public class DataLoader {
     private DataSource coreDataSource;
     private DataSource accountsDataSource;
 
+    private YAMLConfig.CoreJpaProperties coreJpaProperties;
+    private YAMLConfig.AccountJpaProperties accountJpaProperties;
+
     @Autowired
     public DataLoader(
         DataSource coreDataSource,
         @Qualifier("accountsDataSource")
-            DataSource accountsDataSource)
+            DataSource accountsDataSource,
+        YAMLConfig.CoreJpaProperties coreJpaProperties,
+        YAMLConfig.AccountJpaProperties accountJpaProperties)
     {
         this.coreDataSource = coreDataSource;
         this.accountsDataSource = accountsDataSource;
+        this.coreJpaProperties = coreJpaProperties;
+        this.accountJpaProperties = accountJpaProperties;
     }
 
     @PostConstruct
     @Bean(name="CoreDataSourceInitializer")
-    public DataSourceInitializer coreDataSourceInitializer() {
+    public DataSourceInitializer coreDataSourceInitializer() { // todo DRY
+        if (!coreJpaProperties.getLoad_initial()) { return null; }
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
         resourceDatabasePopulator.addScript(new ClassPathResource("data-core-mysql.sql"));
-
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
         dataSourceInitializer.setDataSource(coreDataSource);
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
@@ -51,10 +59,10 @@ public class DataLoader {
 
     @PostConstruct
     @Bean(name="AccountDataSourceInitializer")
-    public DataSourceInitializer accountDataSourceInitializer() {
+    public DataSourceInitializer accountDataSourceInitializer() { // todo DRY
+        if (!accountJpaProperties.getLoad_initial()) { return null; }
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
         resourceDatabasePopulator.addScript(new ClassPathResource("data-account-mysql.sql"));
-
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
         dataSourceInitializer.setDataSource(accountsDataSource);
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);

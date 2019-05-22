@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "publisher")
+@Table(name = "Publisher")
 public class Publisher {
 
     @Id

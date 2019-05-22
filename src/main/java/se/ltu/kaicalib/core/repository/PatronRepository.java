@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.ltu.kaicalib.core.domain.Patron;
 
+import java.util.UUID;
+
 /**
  * Unsure about how to retrieve the correct user object from the db here since I don't know how
  * login will be handled.
@@ -15,5 +17,5 @@ import se.ltu.kaicalib.core.domain.Patron;
  */
 @Repository
 public interface PatronRepository extends JpaRepository<Patron, Long> {
-
+    Patron getPatronByUserUuid(UUID userUuid);
 }

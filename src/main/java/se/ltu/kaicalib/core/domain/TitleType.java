@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "title_type")
+@Table(name = "Title_type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type_discriminator")
 public abstract class TitleType {

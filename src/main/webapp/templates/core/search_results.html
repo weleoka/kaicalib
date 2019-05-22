@@ -27,6 +27,21 @@
     <div th:if="${#lists.isEmpty(titles)}">Sorry we found nothing</div>
 
 
+<!--    Saved from searchResultExp.html
+    <form th:object="${selected}" method="POST" th:action="@{/search_add_copy/display_search_results/add_selected}">
+        <fieldset>
+            <legend>Titles Found</legend>
+            <ul>
+                <li th:each="title : ${titles}">
+                    <input type="radio" th:value="${title.name}" />
+                    <label th:for="${title.id}" th:text="${title.name}"></label>
+                </li>
+            </ul>
+        </fieldset>
+        <p><input type="submit" value="Select Title" /> <input type="reset" value="Reset" /></p>
+    </form>-->
+
+
 <!--    <div th:if="${not #lists.isEmpty(titles)}">
         <form th:each="title : ${titles}" th:action="@{/search_add_copy/display_search_results}" th:object="${title}" method="POST">
             <input type="hidden" th:field="${title.id}" />

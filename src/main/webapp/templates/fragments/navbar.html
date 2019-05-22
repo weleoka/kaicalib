@@ -23,9 +23,11 @@
                     </li>
                     <li><a th:href="@{/patron/view_loans}">Loans</a></li>
                     <li><a th:href="@{/patron/view_reservations}">Reservations</a></li>
-                    <li><a th:href="@{/patron/patron_search}">Search(old)</a></li>
+
                     <li><a th:href="@{/search}">Search</a></li>
-                    <li><a th:href="@{/patron/copy_scan}">Scan</a></li>
+
+                    <li><a th:href="@{/patron/checkout}">Checkout</a><br></li>
+
                     <li><a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a></li>
                     <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
                 </ul>

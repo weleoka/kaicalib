@@ -93,7 +93,7 @@ public class AccountsDbConfig {
         // naming strategy to put underscores instead of camel case
         // as per auto JPA Configuration
         //props.put("hibernate.ejb.naming_strategy", new SpringNamingStrategy());
-        props.put("hibernate.hbm2ddl.auto", "create-drop");
+        props.put("hibernate.hbm2ddl.auto", "update");
         props.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         return props;
     }

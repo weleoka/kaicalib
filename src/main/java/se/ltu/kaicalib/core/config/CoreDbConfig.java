@@ -2,7 +2,6 @@ package se.ltu.kaicalib.core.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -15,8 +14,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -27,11 +24,16 @@ import java.util.Map;
 )
 public class CoreDbConfig {
 
+    @Autowired
+    YAMLConfig.CoreJpaProperties coreJpaProperties;
+
+
     @Bean(name="coreDatasourceProperties")
     @ConfigurationProperties("datasource")
     public DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }
+
 
     @Bean(name = "dataSource")
     @Primary
@@ -42,22 +44,13 @@ public class CoreDbConfig {
             .type(HikariDataSource.class).build();
     }
 
-    //@Autowired
+
     @Bean(name="coreTransactionManager")
     DataSourceTransactionManager transactionManager(DataSource datasource) {
         DataSourceTransactionManager txm  = new DataSourceTransactionManager(datasource);
         return txm;
     }
 
-
-    // todo Move out to application.yml
-    private Map<String, Object> jpaProperties() {
-        Map<String, Object> props = new HashMap<>();
-        props.put("hibernate.hbm2ddl.auto", "create-drop");
-        props.put("hibernate.dialect",  "org.hibernate.dialect.MySQL5Dialect.MySQL5InnoDBDialect");
-
-        return props;
-    }
 
     @Primary
     @Bean
@@ -66,7 +59,7 @@ public class CoreDbConfig {
             .dataSource(dataSource())
             .packages(new String[] {"se.ltu.kaicalib.core"})
             .persistenceUnit("bibsys-core")
-            .properties(jpaProperties())
+            .properties(coreJpaProperties.getJpaProperties())
             .build();
     }
 }

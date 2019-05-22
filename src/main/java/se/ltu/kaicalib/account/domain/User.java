@@ -2,11 +2,11 @@ package se.ltu.kaicalib.account.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.Type;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")

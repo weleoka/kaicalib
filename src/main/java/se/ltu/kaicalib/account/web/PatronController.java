@@ -18,7 +18,6 @@ import se.ltu.kaicalib.account.utils.RoleNotValidException;
 import se.ltu.kaicalib.account.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 /**

@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 
 @Entity
-@Table(name = "loan")
+@Table(name = "Loan")
 public class Loan {
 
     @Id

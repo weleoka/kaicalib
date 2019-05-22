@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "copy")
+@Table(name = "Copy")
 public class Copy {
 
     @Id
@@ -24,7 +24,7 @@ public class Copy {
     final private UUID uuid = UUID.randomUUID();
 
     @Basic
-    @Column(name = "status")
+    @Column(name = "curr_status")
     private String status;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -32,6 +32,7 @@ public class Copy {
     private Title title;
 
     @OneToOne(cascade = CascadeType.ALL)
+    //@Column
     private CopyType copyType;
 
     //TODO store on loan only?

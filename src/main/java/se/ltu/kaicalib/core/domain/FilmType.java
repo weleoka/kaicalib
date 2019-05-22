@@ -19,7 +19,7 @@ public class FilmType extends TitleType{
 
     //Just a fraction of all information that could be stored about a movie
     @ElementCollection
-    @CollectionTable(name = "actors", joinColumns = @JoinColumn(name = "actor_id"))
+    @CollectionTable(name = "Actors", joinColumns = @JoinColumn(name = "actor_id"))
     @Column(name = "actor_name")
     private List<String> actors;
 

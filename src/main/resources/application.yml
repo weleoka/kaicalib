@@ -34,8 +34,6 @@ spring:
 ---
 spring:
     profiles: dev
-
-
     application:
         name: kaicalib
 
@@ -145,6 +143,21 @@ logging:
 
 
 
+# ===============================
+# = KAICALIB configurations for DEV
+# ===============================
+kaicalib:
+    account:
+        jpa:
+            ddl_auto: update
+            dialect: org.hibernate.dialect.MySQL5Dialect
+        load_initial: false
+
+    core:
+        jpa:
+            ddl_auto: update
+            dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        load_initial: false
 
 
 
@@ -171,13 +184,7 @@ datasource:
 ---
 spring:
     profiles: datasource-h2
-    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
-        properties:
-            hibernate.dialect: org.hibernate.dialect.H2Dialect
-            hibernate.ddl-auto: update
-        hibernate:
-            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
-            # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+
     h2:
         console: # Allows http://localhost:8080/console as a dbms tool
             enabled: true
@@ -216,6 +223,7 @@ spring:
             #hibernate.default_schema: PUBLIC
         hibernate:
             ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
+        #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # should work as well as through hibernate property
 
 datasource:
     username: bibsys_db_user
@@ -232,15 +240,6 @@ datasource:
 # todo Question: USE <database> be possible. One for accounts, one for domain but on the same SQL database server?
 spring:
     profiles: datasource-accounts-mysql
-    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
-        properties:
-            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-            #hibernate.default_schema: PUBLIC
-        hibernate:
-            ddl-auto: create-drop
-            #ddl-auto: update # create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
-            #naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
 
 accounts-datasource:
     username: bibsys_db_user
