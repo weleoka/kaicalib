@@ -13,8 +13,8 @@
     <p>Current auth user: </p>
     <p th:if="${authUser}" th:text="${authUser.username}"></p>
 
-    <h3>All users</h3>
-    <table th:if="${not #lists.isEmpty(allUsers)}">
+    <h3>User Details</h3>
+    <table th:if="${authUser}">
         <tr>
             <th>User Id</th>
             <th>Username</th>
@@ -22,7 +22,7 @@
             <th>Last name</th>
             <th>Adress</th>
         </tr>
-        <tr th:each="user : ${allUsers}">
+        <tr th:each="user : ${authUser}">
             <td th:text="${user.id}"></td>
             <td th:text="${user.username}"></td>
             <td th:text="${user.firstname}"></td>
