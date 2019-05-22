@@ -77,7 +77,17 @@ public class AccountsDbConfig {
         return tm;
     }
 
-    // todo Move out to application.yml
+    /**
+     * These are here because when not autoconfiguring with Spring then the
+     * application.yml is not parsed for settings, only the actual datasource parameters are read.
+     *
+     * It's a big pickle due to parts of Spring not being up to date with YAML as of 20 May 2019.
+     *
+     * todo Move out to application.yml when time allows
+     *
+     * @return properties
+     */
+    //@ConfigurationProperties("accounts-datasource.configuration")
     private Map<String, Object> jpaProperties() {
         Map<String, Object> props = new HashMap<>();
         // naming strategy to put underscores instead of camel case

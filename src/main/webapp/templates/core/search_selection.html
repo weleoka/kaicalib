@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title th:text="Details - ${title.name}" id="pageTitle">error in the title</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <div th:if="${title}">
+        <h3>Details on </h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Details!</th>
+                <th> - </th>
+            </tr>
+                <td th:text="${title.name}"></td>
+                <td>Everything you need to know about the title here.</td>
+                <td><a th:href="@{/borrow(id=${title.id})}">borrow</a></td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="not ${title}">Sorry, that must be have been an error.</div>
+
+
+<!--    <div th:if="${title}">
+        <form method="GET" th:action="/patron/borrow(id=${title.id})">
+            <input type="submit" value="Borrow"/>
+        </form>
+    </div>-->
+
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

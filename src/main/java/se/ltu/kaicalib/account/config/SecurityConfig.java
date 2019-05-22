@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -62,14 +63,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/login/auto",               // todo Disable for production.
                 "/login/admin/auto",         // todo Disable for production.
 
+                "/librarian_home/**",
+
                 "/test",
                 "/signup",
                 "/logout",
+
                 "/",
                 "/favicon.*",
                 "/js/**",
                 "/css/**",
-                "/images/**"
+                "/images/**",
+
+                "/search",
+                "/search_results",
+                "/search_selection"
             )
             .permitAll()
             .anyRequest().authenticated()
@@ -99,7 +107,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and() // todo Disable for production.
             .headers().frameOptions().disable(); // To allow H2 console.
     }
-
 
 
     /**

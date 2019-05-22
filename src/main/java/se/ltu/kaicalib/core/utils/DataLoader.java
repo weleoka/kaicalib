@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 
@@ -35,6 +36,7 @@ public class DataLoader {
         this.accountsDataSource = accountsDataSource;
     }
 
+    @PostConstruct
     @Bean(name="CoreDataSourceInitializer")
     public DataSourceInitializer coreDataSourceInitializer() {
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
@@ -47,6 +49,7 @@ public class DataLoader {
         return dataSourceInitializer;
     }
 
+    @PostConstruct
     @Bean(name="AccountDataSourceInitializer")
     public DataSourceInitializer accountDataSourceInitializer() {
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();

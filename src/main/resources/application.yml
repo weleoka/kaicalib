@@ -88,8 +88,7 @@ spring:
             show-sql: true
             use_sql_comments: true
             format_sql: true
-            # create-drop, validate if schema is made by schema.sql for example. create-drop is default with in-memory db.
-            #ddl-auto: update # Set at datasource level instead.
+            # ddl-auto: 'create-drop' # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
@@ -130,6 +129,11 @@ logging:
         org.springframework.web: WARN
         org.springframework.security: WARN
         org.springframework.security.web: DEBUG
+        org.springframework.security.web.FilterChainProxy: DEBUG # FilterChainProxy
+        org.springframework.security.web.access.FilterSecurityInterceptor: DEBUG # FilterSecurityInterceptor
+        org.springframework.security.web.util.matcher: WARN # OrRequestMatcher & AntRequestMatcher
+        # org.springframework.security.web.util.matcher.AntRequestMatcher: WARN #
+
         org.hibernate: WARN
         com.datasources: DEBUG
     pattern:
@@ -149,30 +153,31 @@ logging:
 ---
 spring:
     profiles: datasource-hsql
+    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
+        # database-platform: MYSQL # Can be autodetected. Sets an ENUM for DB jpa type.
+        properties:
+            hibernate.dialect: org.hibernate.dialect.HSQLDialect
+        hibernate:
+            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
+            # validate if schema is made by schema.sql. create-drop is default with in-memory db.
 datasource:
     name: HSQL-datasource
     #shutdown=true can be used in the url to disable the database's automatic shutdown.
     #url: jdbc:hsqldb:file:./hsqldb_data/testdb
     url: jdbc:hsqldb:mem:bibsys_db
     platform: all # all is default for data.sql and schema.sql files for loading.
-jpa:
-    # database-platform: MYSQL # Can be autodetected. Sets an ENUM for DB jpa type.
-    properties:
-        hibernate.dialect: org.hibernate.dialect.HSQLDialect
-    hibernate:
-        ddl-auto: create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
-
 
 
 ---
 spring:
     profiles: datasource-h2
-    jpa:
+    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
         properties:
             hibernate.dialect: org.hibernate.dialect.H2Dialect
             hibernate.ddl-auto: update
         hibernate:
-            ddl-auto: create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
+            # validate if schema is made by schema.sql. create-drop is default with in-memory db.
     h2:
         console: # Allows http://localhost:8080/console as a dbms tool
             enabled: true
@@ -204,12 +209,13 @@ datasource:
 ---
 spring:
     profiles: datasource-mysql
-    jpa:
+    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
         properties:
-            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect #org.hibernate.dialect.MySQL5InnoDBDialect:
+
             #hibernate.default_schema: PUBLIC
         hibernate:
-            ddl-auto: update
+            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
 
 datasource:
     username: bibsys_db_user
@@ -226,12 +232,12 @@ datasource:
 # todo Question: USE <database> be possible. One for accounts, one for domain but on the same SQL database server?
 spring:
     profiles: datasource-accounts-mysql
-    jpa:
+    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
         properties:
             hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
             #hibernate.default_schema: PUBLIC
         hibernate:
-            ddl-auto: update
+            ddl-auto: create-drop
             #ddl-auto: update # create-drop # validate if schema is made by schema.sql. create-drop is default with in-memory db.
             #naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
 

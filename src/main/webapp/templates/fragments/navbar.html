@@ -8,7 +8,7 @@
 <div class="masthead" th:fragment="navbar">
 
     <div class="header">
-        <img src="images/logo.png" alt="logo" />
+        <img th:src="@{~/images/logo.png}" alt="logo" />
         <h1>Kaica_Lib Online!</h1>
     </div>
 
@@ -17,10 +17,14 @@
         <div class="navbar-inner">
             <div class="container">
                 <ul class="nav">
-                    <li class="active"><a th:href="@{/}">Home</a></li>
+                    <li>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/patron/profile}">Home</a>
+                        <a sec:authorize="!isAuthenticated()" th:href="@{/}">Home</a>
+                    </li>
                     <li><a th:href="@{/patron/view_loans}">Loans</a></li>
                     <li><a th:href="@{/patron/view_reservations}">Reservations</a></li>
-                    <li><a th:href="@{/patron/patron_search}">Search</a></li>
+                    <li><a th:href="@{/patron/patron_search}">Search(old)</a></li>
+                    <li><a th:href="@{/search}">Search</a></li>
                     <li><a th:href="@{/patron/copy_scan}">Scan</a></li>
                     <li><a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a></li>
                     <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
@@ -29,7 +33,7 @@
         </div>
         <div> Hello:
             <span sec:authentication="name">logged-in-users-username</span>
-            <span sec:authorize="hasRole('PATRON')">(aut submit a form for testing springADMIN)</span>
+            <span sec:authorize="hasRole('ADMIN')">(auth submit a form for testing ADMIN)</span>
         </div>
     </div><!-- /.navbar -->
 </div>

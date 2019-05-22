@@ -22,7 +22,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
     entityManagerFactoryRef = "entityManagerFactory",
-    transactionManagerRef = "transactionManager",
+    transactionManagerRef = "coreTransactionManager",
     basePackages = {"se.ltu.kaicalib.core"}
 )
 public class CoreDbConfig {
@@ -42,10 +42,9 @@ public class CoreDbConfig {
             .type(HikariDataSource.class).build();
     }
 
-
+    //@Autowired
     @Bean(name="coreTransactionManager")
-    @Autowired
-    DataSourceTransactionManager transactionManager(@Qualifier("accountsDataSource") DataSource datasource) {
+    DataSourceTransactionManager transactionManager(DataSource datasource) {
         DataSourceTransactionManager txm  = new DataSourceTransactionManager(datasource);
         return txm;
     }
@@ -55,6 +54,8 @@ public class CoreDbConfig {
     private Map<String, Object> jpaProperties() {
         Map<String, Object> props = new HashMap<>();
         props.put("hibernate.hbm2ddl.auto", "create-drop");
+        props.put("hibernate.dialect",  "org.hibernate.dialect.MySQL5Dialect.MySQL5InnoDBDialect");
+
         return props;
     }
 

@@ -16,12 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "/patron/patron_search")
-// @Secured("PATRON") // todo CLEAR the auth level on this controller
 public class PatronSearchController {
-    /*
-    todo is the search neccessarily a patron "thing"? Cant adding the copy to basket be a patron thing?
-     */
-
     TitleRepository titleRepository;
     List<Title> titles = new ArrayList<>();
 
@@ -30,11 +25,12 @@ public class PatronSearchController {
         this.titleRepository = titleRepository;
     }
 
-    @ModelAttribute(name = "titles")
+/*    @ModelAttribute(name = "titles")
     public List<Title> getTitles() {
         List<Title> titles = new ArrayList<>();
         return titles;
-    }
+    }*/
+
 
     @GetMapping
     public String showSearch(Model model) {
@@ -45,10 +41,10 @@ public class PatronSearchController {
         return "core/patronSearchTitleForm";
     }
 
+
     @PostMapping
     public String showSearchResult(
             @ModelAttribute("command") TitleSearchFormCommand command, Model model) {
-
         titles.clear();
 
         for (Title t : titleRepository.findFirst20ByNameContaining(command.getTitleSearchString())) {
@@ -57,16 +53,15 @@ public class PatronSearchController {
                 titles.add(t);
             }
         }
+        //model.addAttribute("titles", titles);
 
-        model.addAttribute("titles", titles);
-
-        return "redirect:/display_search_results";
+        return "redirect:/patron/patron_search/display_search_results";
     }
+
 
     @GetMapping("/display_search_results")
     public String displaySearchResult(Model model) {
-
-        model.addAttribute("titles", titles);
+        model.addAttribute("titles", this.titles);
 
         return "core/patronSearchResult";
     }

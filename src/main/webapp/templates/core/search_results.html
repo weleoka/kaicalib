@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Select title to add copy for</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+
+    <div th:if="${not #lists.isEmpty(titles)}">
+        <h3>Found the following titles matching your query</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th> - </th>
+            </tr>
+            <tr th:each="title : ${titles}">
+                <td th:text="${title.name}"></td>
+                <td><a th:href="@{/search_selection(id=${title.id})}">details</a></td>
+                <!--<td th:text="${title.createdAt}"></td>-->
+            </tr>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(titles)}">Sorry we found nothing</div>
+
+
+<!--    <div th:if="${not #lists.isEmpty(titles)}">
+        <form th:each="title : ${titles}" th:action="@{/search_add_copy/display_search_results}" th:object="${title}" method="POST">
+            <input type="hidden" th:field="${title.id}" />
+            <div class="row">
+                <div class="col">
+                    <select th:field="${title.id}" class="custom-select mr-sm-2">
+                        <option th:value="${{title.id}}"
+                                th:text="${title.name}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <p>
+                <input type="submit" value="Select Title">
+                <input type="reset" value="Reset">
+            </p>
+        </form>
+    </div>-->
+</div>
+
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>
