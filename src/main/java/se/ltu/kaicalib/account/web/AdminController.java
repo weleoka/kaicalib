@@ -14,11 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminController {
 
     @GetMapping("/admin/profile")
-    public String getAdminPage() {
-        return "account/admin/profile";
-    }
-
-    @GetMapping("/patron/profile")
     public String getProfile(HttpServletRequest request, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model
@@ -26,7 +21,7 @@ public class AdminController {
             .addAttribute("user", auth.getName())
             .addAttribute("roles", auth.getAuthorities());
 
-        return "account/patron/profile";
+        return "account/admin/profile";
     }
 
 }

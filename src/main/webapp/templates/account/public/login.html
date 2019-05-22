@@ -18,15 +18,15 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6" >
-                <div th:if="${param.error}"  class="login-notification">
+                <span th:if="${param.error}"  class="alert alert-warning">
                     Invalid username or password.
-                </div>
-                <div th:if="${param.logout}"  class="login-notification">
+                </span>
+                <span th:if="${param.logout}"  class="alert alert-success">
                     You have been logged out.
-                </div>
-                <div th:if="${param.warning}"  class="login-notification">
+                </span>
+                <span th:if="${param.warning}"  class="alert alert-warning">
                     You have to log in to access that page.
-                </div>
+                </span>
                 <!--<div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"> </div>-->
             </div>
         </div>

@@ -87,6 +87,7 @@ th {
 
 .login-notification {
     float: right;
+    vertical-align: middle !important;
 }
 
 
