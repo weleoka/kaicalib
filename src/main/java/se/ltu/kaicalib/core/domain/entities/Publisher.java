@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.domain;
+package se.ltu.kaicalib.core.domain.entities;
 
 import org.hibernate.annotations.Type;
 

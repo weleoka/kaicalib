@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import se.ltu.kaicalib.core.domain.Title;
+import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
 import se.ltu.kaicalib.core.repository.TitleRepository;
 

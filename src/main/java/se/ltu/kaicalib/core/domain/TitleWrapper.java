@@ -1,5 +1,7 @@
 package se.ltu.kaicalib.core.domain;
 
+import se.ltu.kaicalib.core.domain.entities.Title;
+
 /**
  * Does not need to be persisted, wrapper for title objects to be populated in Thymeleaf forms.
  */

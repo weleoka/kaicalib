@@ -1,20 +1,20 @@
-package se.ltu.kaicalib.core.domain;
+package se.ltu.kaicalib.core.domain.entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("COURSE")
-public class CourseCopyType extends CopyType {
+@DiscriminatorValue("FILM")
+public class FilmCopyType extends CopyType {
 
     /**
      * Required Hibernate no-args-constructor.
      */
-    public CourseCopyType() {}
+    public FilmCopyType() {}
 
-    public CourseCopyType(Copy copy) {
+    public FilmCopyType(Copy copy) {
         super.setCopy(copy);
         //TODO fetch value from DB instead
-        super.setLoanTimeInWeeks(2);
+        super.setLoanTimeInWeeks(1);
     }
 }

@@ -21,7 +21,7 @@
                 <td th:text="${title.name}"></td>
                 <td th:text="${copies.size()}"></td>
                 <td>
-                    <a th:if="${copies.size() >= 1}" th:href="@{/borrow(id=${title.id})}">borrow</a>
+                    <a th:if="${copies.size() >= 1}" th:href="@{/add_to_checkout(id=${title.id})}">borrow</a>
                     <a th:if="${copies.size() <= 0}" th:href="@{/reserve(id=${title.id})}">reserve</a>
                 </td>
             </tr>

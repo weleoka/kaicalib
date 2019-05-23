@@ -17,26 +17,15 @@
             <th>Return Date</th>
             <th>Renew Loan</th>
         </tr>
-
         <tr th:each="loan : ${loans}" th:value>
-            <td th:text="${loan.copy.title.name}">Loan Name</td>
-            <td th:text="${loan.createdAt}">Loan Date</td>
-            <td th:text="${loan.returnDate}">Return Date</td>
-            <td>
-                <!-- I'm doing this wrong, but don't have a clue what I'm actually up to so leaving it for now -->
-                <form th:each="loan : ${loans}" method="POST" th:action="@{/patron/view_loans/cancel}" th:object="${loanWrapper}">
-                    <input type="submit" value="Renew Loan" th:value="${loan.copy.title.name}"/>
-                </form>
-            </td>
+            <td th:text="${loan.copy.title.name}">Loan Title Name</td>
+            <td th:text="${loan.createdAt}">Loan Created Date</td>
+            <td th:text="${loan.returnDate}">Loan Return Date</td>
+            <td><a th:href="@{/loan_renew(id=${loan.id})}">Renew loan</a></td>
         </tr>
     </table>
 
 
-    <form method="GET" th:action="@{/patron}">
-        <input type="submit" value="Home">
-    </form>
-
-    <div class="gap-10"></div>
 </div>
 
 <div th:replace="fragments/layout :: footerFragment"></div>

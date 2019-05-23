@@ -3,7 +3,7 @@ package se.ltu.kaicalib.core.web.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import se.ltu.kaicalib.core.domain.Title;
+import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.repository.TitleRepository;
 
 @ControllerAdvice

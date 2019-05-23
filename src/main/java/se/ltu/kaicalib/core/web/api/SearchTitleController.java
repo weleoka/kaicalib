@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.ltu.kaicalib.core.domain.Title;
+import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.repository.TitleRepository;
 
 import java.util.Optional;

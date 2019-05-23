@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.domain;
+package se.ltu.kaicalib.core.domain.entities;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -74,6 +74,10 @@ public class Copy {
     }
 
     // ********************** Accessor Methods ********************** //
+
+    public Long getId() {
+        return this.id;
+    }
 
     public String getStatus() {
         return this.status;

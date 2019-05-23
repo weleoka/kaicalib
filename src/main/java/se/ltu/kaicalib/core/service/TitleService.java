@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.ltu.kaicalib.core.domain.Title;
+import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.repository.TitleRepository;
 
 import java.util.List;

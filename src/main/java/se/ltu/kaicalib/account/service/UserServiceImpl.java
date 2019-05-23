@@ -16,7 +16,7 @@ import se.ltu.kaicalib.account.domain.User;
 import se.ltu.kaicalib.account.repository.RoleRepository;
 import se.ltu.kaicalib.account.repository.UserRepository;
 import se.ltu.kaicalib.account.utils.RoleNotValidException;
-import se.ltu.kaicalib.core.domain.Patron;
+import se.ltu.kaicalib.core.domain.entities.Patron;
 
 import java.util.*;
 
@@ -116,4 +116,11 @@ public class UserServiceImpl implements UserService {
         return new SimpleGrantedAuthority(roleStr);
     }
 
+
+    public User getAuthUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        return findUserByUsername(username);
+    }
 }

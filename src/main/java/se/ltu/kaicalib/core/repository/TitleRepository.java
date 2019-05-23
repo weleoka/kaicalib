@@ -2,7 +2,7 @@ package se.ltu.kaicalib.core.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import se.ltu.kaicalib.core.domain.Title;
+import se.ltu.kaicalib.core.domain.entities.Title;
 
 import java.util.List;
 

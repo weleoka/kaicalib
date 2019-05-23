@@ -1,5 +1,7 @@
 package se.ltu.kaicalib.core.domain;
 
+import se.ltu.kaicalib.core.domain.entities.Loan;
+
 public class LoanWrapper {
 
     private Loan loan;

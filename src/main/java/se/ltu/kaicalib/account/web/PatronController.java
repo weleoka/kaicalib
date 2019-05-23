@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller handling the basic actions of what is known as
- * a patron acording to the business rules.
+ * a patron according to the business rules.
  *
  *
  * @author
@@ -42,7 +42,7 @@ public class PatronController {
 
     @GetMapping("/patron/update")
     public String updatePatron(Model model) {
-        model.addAttribute(getAuthUser());
+        model.addAttribute(userService.getAuthUser());
 
         return "account/patron/update";
     }
@@ -68,7 +68,7 @@ public class PatronController {
      */
     @RequestMapping(value= {"/patron/update"}, method = RequestMethod.POST)
     public String updatePatron(User userForm, BindingResult bindingResult, Model model) throws RoleNotValidException {
-        User user = getAuthUser();
+        User user = userService.getAuthUser();
         userValidator.validateUpdate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -88,13 +88,12 @@ public class PatronController {
         model.addAttribute("user", user); // todo check what this does to the model. Don't want to return pwd for example.
 
         return "account/patron/update";
-
     }
 
 
     @GetMapping("/patron/details")
     public String detailsPatron(Model model) {
-        model.addAttribute("authUser", getAuthUser());
+        model.addAttribute("authUser", userService.getAuthUser());
 
         return "account/patron/details";
     }
@@ -108,14 +107,6 @@ public class PatronController {
             .addAttribute("roles", auth.getAuthorities());
 
         return "account/patron/profile";
-    }
-
-
-    public User getAuthUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-
-        return userService.findUserByUsername(username);
     }
 }
 

@@ -58,7 +58,7 @@ public class BibsysConfig implements WebMvcConfigurer {
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
+        messageSource.setBasename("i18/messages-en");
         return messageSource;
     }
 

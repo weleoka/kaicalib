@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.domain;
+package se.ltu.kaicalib.core.domain.entities;
 
 import org.hibernate.annotations.Type;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Title class containing title specific information.
+ * Loan class containing title specific information.
  */
 
 @Entity
@@ -41,14 +41,25 @@ public class Loan {
      */
     public Loan() {}
 
-    /**
-     * Required Hibernate no-args-constructor.
-     */
     public Loan(Copy copy, Patron patron) {
         this.copy = copy;
         this.patron = patron;
     }
 
+    /**
+     * Creates a new loan from and old one.
+     * The new one is made with a start date from the
+     * return date of the old one.
+     * Note also that it internally calls
+     * makeLoan() to set the temporal properties.
+     *
+     * @param loan
+     */
+    public Loan(Loan loan) {
+        this.copy = loan.getCopy();
+        this.patron = getPatron();
+        makeLoan();
+    }
 
     // ********************** Accessor Methods ********************** //
 
@@ -74,29 +85,26 @@ public class Loan {
 
     private void setReturnDate(LocalDate returnDate) { this.returnDate = returnDate; }
 
+
+
     // ********************** Model Methods ********************** //
 
     //TODO research how @PrePersist reacts on updates.
     //TODO possibly don't make the loan on persist and change state beforehand so the Loan is ready.
     @PrePersist
     void createdAt() {
-
         this.createdAt = LocalDate.now();
-
         this.makeLoan();
-
     }
 
     //Loan->Copy->CopyType-(int)->Copy-(int)->Loan.makeLoan(int)
     private void makeLoan() {
-
         int loanTime = copy.getLoanTimeInWeeks();
-
         LocalDate newReturnDate = LocalDate.now().plusWeeks(loanTime);
-
         this.setReturnDate(newReturnDate);
-
     }
+
+
 
     // ********************** Common Methods ********************** //
 

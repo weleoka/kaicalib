@@ -1,6 +1,7 @@
 package se.ltu.kaicalib.core.domain;
 
 import lombok.Data;
+import se.ltu.kaicalib.core.domain.entities.CopyType;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -10,6 +11,13 @@ import java.util.UUID;
  * onwards, hence not allowing a full econstruction of an object from persistence.
  *
  * DTO / Data Transfer Object. That could be entirely the wrong name for classes like this.
+ *
+ * It would be combined with data about other relevant objects. Which title it "owns"
+ * and  the likes.
+ *
+ * Decided also that this is completely unnecessary for this project as everything
+ * has too be passed down int an HTTP layer. If moving json then possibly DTO's come
+ * into play for providing an API with it's data in a convenient form.
  */
 @Data
 public class CopyDTO {

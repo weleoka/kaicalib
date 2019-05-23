@@ -1,5 +1,7 @@
 package se.ltu.kaicalib.core.domain;
 
+import se.ltu.kaicalib.core.domain.entities.Title;
+
 import java.util.ArrayList;
 import java.util.List;
 
