@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.CopyDTO;
+import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Title;
 
 import java.util.List;

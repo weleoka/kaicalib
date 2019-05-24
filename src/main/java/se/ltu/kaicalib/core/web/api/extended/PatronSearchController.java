@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.web.api;
+package se.ltu.kaicalib.core.web.api.extended;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,30 +7,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
+import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.repository.TitleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "simple_search")
-public class SimpleSearchController {
-
+@RequestMapping(path = "/patron/patron_search")
+public class PatronSearchController {
     TitleRepository titleRepository;
     List<Title> titles = new ArrayList<>();
 
     @Autowired
-    public SimpleSearchController(TitleRepository titleRepository) {
+    public PatronSearchController(TitleRepository titleRepository) {
         this.titleRepository = titleRepository;
     }
 
-    @ModelAttribute(name = "titles")
+/*    @ModelAttribute(name = "titles")
     public List<Title> getTitles() {
         List<Title> titles = new ArrayList<>();
         return titles;
-    }
+    }*/
+
 
     @GetMapping
     public String showSearch(Model model) {
@@ -38,26 +38,31 @@ public class SimpleSearchController {
 
         model.addAttribute("command", command);
 
-        return "core/simpleSearchTitleForm";
+        return "core/patronSearchTitleForm";
     }
+
 
     @PostMapping
     public String showSearchResult(
             @ModelAttribute("command") TitleSearchFormCommand command, Model model) {
+        titles.clear();
+
         for (Title t : titleRepository.findFirst20ByNameContaining(command.getTitleSearchString())) {
-            titles.add(t);
+
+            if (!(titles.contains(t))) {
+                titles.add(t);
+            }
         }
+        //model.addAttribute("titles", titles);
 
-        model.addAttribute("titles", titles);
-
-        return "redirect:/simple_search/display_search_results";
+        return "redirect:/patron/patron_search/display_search_results";
     }
+
 
     @GetMapping("/display_search_results")
     public String displaySearchResult(Model model) {
+        model.addAttribute("titles", this.titles);
 
-        model.addAttribute("titles", titles);
-
-        return "core/simpleSearchResult";
+        return "core/patronSearchResult";
     }
 }

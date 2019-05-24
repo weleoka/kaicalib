@@ -14,45 +14,58 @@ import org.springframework.web.bind.annotation.RequestParam;
 import se.ltu.kaicalib.core.domain.CheckoutList;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Loan;
+import se.ltu.kaicalib.core.domain.entities.Receipt;
+import se.ltu.kaicalib.core.service.CheckoutService;
+import se.ltu.kaicalib.core.service.CopyService;
 import se.ltu.kaicalib.core.service.LoanService;
+import se.ltu.kaicalib.core.service.PatronService;
 
 import static se.ltu.kaicalib.core.utils.GenUtil.toArr;
 
 
 /**
- * Routes controller specific for actions
- * concerning loans. These are restricted to the Role PATRON.
+ * Routes controller specific for actions concerning loans.
  *
+ * These are restricted to the Role PATRON.
  *
  */
 @Controller
-@Secured("PATRON") // todo production check
+@Secured("PATRON")
 public class LoanController {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private PatronService patronService;
     private LoanService loanService;
+    private CopyService copyService;
     private CheckoutList checkoutList;
+    private CheckoutService checkoutService;
     private MessageSource messageSource;
 
 
     @Autowired
     LoanController(
+        PatronService patronService,
         LoanService loanService,
+        CopyService copyService,
         CheckoutList checkoutList,
+        CheckoutService checkoutService,
         MessageSource messageSource) {
+        this.patronService = patronService;
         this.loanService = loanService;
+        this.copyService = copyService;
         this.checkoutList = checkoutList;
+        this.checkoutService = checkoutService;
         this.messageSource = messageSource;
     }
 
 
-    @GetMapping("/add_to_checkout")
-    public String addTitleToCheckout(@RequestParam("id") Long titleId, Model model) {
-        Copy copy = loanService.getCopyForNewLoan(titleId);
-        checkoutList.addCopyIdToCheckout(copy.getId());
 
-        // if all the above worked then do this, if it did not then fish the BusinessViolationCode out from the stack and process it.
+    /* ====== COPY and TITLES ================================= */
+    // todo recieve selected copy to add to checkout not a title.
+
+    @GetMapping("/checkout_add_title")
+    public String addCopyToCheckout(@RequestParam("id") Long titleId, Model model) {
+        Copy copy = loanService.getCopyForNewLoan(titleId);
+        checkoutList.addCopyId(copy.getId()); // todo business rules checks and feedback on failure
         String msg = messageSource.getMessage("Copy.addedToCheckout.success", toArr(titleId.toString()), null);
         model.addAttribute("success", msg);
 
@@ -60,16 +73,37 @@ public class LoanController {
     }
 
 
-    @GetMapping("/loan_renew")
+    @GetMapping("/checkout_remove_copy")
+    public String removeCopyFromCheckout(@RequestParam("id") Long copyId, Model model) {
+        checkoutList.removeCopyId(copyId);
+        String msg = messageSource.getMessage("Copy.removedFromCheckout.success", toArr(copyId.toString()), null);
+        model.addAttribute("success", msg);
+
+        return "redirect:checkout";
+    }
+
+
+
+    /* ====== LOANS list and renew ============================ */
+
+    @GetMapping("/checkout_renew_loan")
     public String renewLoan(@RequestParam("id") Long id, Model model) {
         Loan loan = loanService.renewLoan(id);
-        checkoutList.addLoanIdToCheckout(loan.getId());
-
-        // if all the above worked then do this, if it did not then fish the BusinessViolationCode out from the stack and process it.
-        String msg = messageSource.getMessage("Loan.renew.success", null, null);
+        checkoutList.addLoanId(loan.getId()); // todo business rules checks and feedback on failure
+        String msg = messageSource.getMessage("Loan.addedToCheckout.success", null, null);
         model.addAttribute("success", msg);
 
         return "redirect:view_loans";
+    }
+
+
+    @GetMapping("/checkout_remove_loan")
+    public String removeLoanRenewalFromCheckout(@RequestParam("id") Long loanId, Model model) {
+        checkoutList.removeLoanId(loanId);
+        String msg = messageSource.getMessage("Loan.removedFromCheckout.success", toArr(loanId.toString()), null);
+        model.addAttribute("success", msg);
+
+        return "redirect:checkout";
     }
 
 
@@ -81,33 +115,36 @@ public class LoanController {
     }
 
 
+
+    /* ====== CHECKOUT ======================================== */
+    // todo Devise safe way of passing the object instances generated for the GetMapping to
+    //  the PostMapping. What happens to flashAttributes if the user leaves view_checkout and
+    //  never activates the PostMapping until later. Need to satisfy memory efficiency concerns.
+
     @GetMapping("/checkout")
     public String viewCheckout(Model model) {
-            // copyIds to titles
-            // and loanIds to Loans
-        //model.addAttribute(titles);
-        //model.addAttribute(loans);
-        // todo work Consider if it wasn't better to keep objects in the Lists rather than Massive-fetching it all
+        model.addAttribute("copies", copyService.getAllCopiesByIdList(checkoutList.getCopiesIds()));
+        model.addAttribute("loans",  loanService.getAllLoansByIdList(checkoutList.getLoansIds()));
+
         return "/core/view_checkout";
     }
 
 
     @PostMapping("/checkout")
-    public String proceedWithCheckout(Model model) {
-        // todo work
-        return "/core/receipt";
+    public String proceedWithCheckout(
+        @RequestParam(value = "libraryterms") Boolean libraryterms,
+        Model model) {
+
+        if (libraryterms) {
+            Receipt receipt = checkoutService.checkOut(checkoutList, patronService.getPatronForAuthUser());
+            String msg = messageSource.getMessage("CheckoutList.checkout.success", toArr(String.valueOf(receipt.gettotalLoanCount())), null);
+            model.addAttribute("success", msg);
+
+            return "/core/receipt";
+        }
+        String msg = messageSource.getMessage("CheckoutList.checkout.termsAndConditions", null, null);
+        model.addAttribute("success", msg);
+
+        return "redirect:checkout";
     }
 }
-
-
-/*
-    private PatronRepository patronRepository;
-    private CopyRepository copyRepository;
-
-        TitleRepository titleRepository,
-        PatronRepository patronRepository,
-        CopyRepository copyRepository,
-            this.titleRepository = titleRepository;
-            this.patronRepository = patronRepository;
-            this.copyRepository = copyRepository;
- */

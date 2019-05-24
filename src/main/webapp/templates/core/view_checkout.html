@@ -10,33 +10,52 @@
 <div class="container">
     <div th:include="fragments/navbar :: navbar"></div>
 
+    <h1>Copies to be checked out</h1>
     <table>
         <tr>
             <th>Book Title</th>
-            <th>To be borrowed today!!!</th>
             <th>Return Date</th>
-            <th>Renew Loan</th>
+            <th> - </th>
         </tr>
 
-        <tr th:each="loan : ${loans}" th:value>
-            <td th:text="${loan.copy.title.name}">Loan Name</td>
-            <td th:text="${loan.createdAt}">Loan Date</td>
-            <td th:text="${loan.returnDate}">Return Date</td>
-            <td>
-                <!-- I'm doing this wrong, but don't have a clue what I'm actually up to so leaving it for now -->
-                <form th:each="loan : ${loans}" method="POST" th:action="@{/patron/view_loans/cancel}" th:object="${loanWrapper}">
-                    <input type="submit" value="Renew Loan" th:value="${loan.copy.title.name}"/>
-                </form>
-            </td>
+        <tr th:each="copy : ${copies}" th:value>
+            <td th:text="${copy.title.name}">Title</td>
+            <td th:text="${copy.returnDate}">Return Date</td>
+            <td><a th:href="@{/lcheckout_remove_copy(id=${copy.id})}">Remove item</a></td>
         </tr>
     </table>
 
+    <h1>Loans to be renewed</h1>
+    <table>
+        <tr>
+            <th>Book Title</th>
+            <th>Original Return Date</th>
+            <th>New return data</th>
+            <th> - </th>
+        </tr>
 
-    <form method="GET" th:action="@{/patron}">
-        <input type="submit" value="Home">
+        <tr th:each="copy : ${loans}" th:value>
+            <td th:text="${loan.title.name}">Title</td>
+            <td th:text="${loan.returnDate}">Return Date</td>
+            <td>Not implemented</td>
+            <td><a th:href="@{/checkout_remove_loan(id=${loan.id})}">Don't renew loan</a></td>
+        </tr>
+    </table>
+
+    <form class="form-horizontal" role="form" method="POST" th:action="@{/checkout}">
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="libraryterms">Agree to libary terms and conditions</label>
+                <input type="checkbox" name="libraryterms" class="form-control" id="libraryterms" required>
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-user-plus"></i>Confirm checkout
+                </button>
+            </div>
+        </div>
     </form>
 
-    <div class="gap-10"></div>
 </div>
 
 <div th:replace="fragments/layout :: footerFragment"></div>

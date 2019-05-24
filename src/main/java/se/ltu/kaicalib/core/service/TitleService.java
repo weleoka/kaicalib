@@ -26,7 +26,7 @@ public class TitleService {
 
     @Transactional(value = "coreTransactionManager", readOnly = true) // todo check on method Vs. class annotation for transactional.
     public Title findById(Long id) {
-        Title title = null; // = titleRepository.findById(id);
+        Title title = null; // = titleRepository.findLoanById(id);
 
         try {
             Optional<Title> tmpOpt = titleRepository.findById(id);

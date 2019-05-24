@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.web.api;
+package se.ltu.kaicalib.core.web.api.extended;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

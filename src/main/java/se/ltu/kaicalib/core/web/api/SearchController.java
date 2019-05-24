@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Title;
-import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
 import se.ltu.kaicalib.core.repository.CopyRepository;
 import se.ltu.kaicalib.core.service.CopyService;
 import se.ltu.kaicalib.core.service.TitleService;
@@ -19,15 +19,22 @@ import se.ltu.kaicalib.core.service.TitleService;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This controller covers routes concerning implementing searches,
+ * displaying search results and also receiving search selections.
+ *
+ *
+ */
 @Controller
 public class SearchController {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private TitleService titleService;
+    private CopyService copyService;
+    private CopyRepository copyRepository; // Yes going controller to repository is considered fine
 
-    TitleService titleService;
-    CopyService copyService;
-    CopyRepository copyRepository; // Yes going controller to repository is considered fine
-    List<Title> titles = new ArrayList<>();
+    private List<Title> titles = new ArrayList<>();
+
 
     @Autowired
     public SearchController(TitleService titleService, CopyService copyService, CopyRepository copyRepository) {
@@ -56,9 +63,9 @@ public class SearchController {
                 titles.add(t);
             }
         }
-        logger.error("Debug: no Titles");
         model.addAttribute("titles", titles);
-
+        logger.debug("Found {} titles matchng search {}", titles.size(), command.getTitleSearchString());
+        
         return "redirect:/search_results";
     }
 
@@ -71,14 +78,13 @@ public class SearchController {
     }
 
 
-    //@RequestAttribute(title) // todo Could use the new annotation and pass entire object...
-    @GetMapping("/search_selection")
+    @GetMapping("/search_selection") // todo Could use the new annotation and pass entire object...
     public String generalSearchResultsPage(@RequestParam("id") Long id, Model model) {
         Title title = titleService.findById(id);
         List<Copy> copies = copyRepository.findAllAvailableCopiesByTitle(title);
-        logger.debug("Fount a title and a few copies");
         model.addAttribute("title", title);
         model.addAttribute("copies", copies);
+        logger.debug("Fount a title and a few copies");
 
         return "core/search_selection";
     }

@@ -21,7 +21,7 @@
             <td th:text="${loan.copy.title.name}">Loan Title Name</td>
             <td th:text="${loan.createdAt}">Loan Created Date</td>
             <td th:text="${loan.returnDate}">Loan Return Date</td>
-            <td><a th:href="@{/loan_renew(id=${loan.id})}">Renew loan</a></td>
+            <td><a th:href="@{/checkout_renew_loan(id=${loan.id})}">Renew loan</a></td>
         </tr>
     </table>
 

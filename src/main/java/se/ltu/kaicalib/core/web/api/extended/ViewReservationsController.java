@@ -1,4 +1,4 @@
-package se.ltu.kaicalib.core.web.api;
+package se.ltu.kaicalib.core.web.api.extended;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

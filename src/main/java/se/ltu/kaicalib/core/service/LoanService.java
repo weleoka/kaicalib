@@ -1,5 +1,7 @@
 package se.ltu.kaicalib.core.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,12 +11,15 @@ import se.ltu.kaicalib.core.domain.entities.Patron;
 import se.ltu.kaicalib.core.repository.CopyRepository;
 import se.ltu.kaicalib.core.repository.LoanRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 @Transactional(value = "coreTransactionManager")
 @Service
 public class LoanService {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private PatronService patronService;
     private LoanRepository loanRepository;
     private CopyRepository copyRepository;
@@ -93,5 +98,58 @@ public class LoanService {
         List<Copy> availablecopies = copyRepository.findAllAvailableCopiesByTitleId(titleId);
 
         return availablecopies.get(1);
+    }
+
+
+    @Transactional(value = "coreTransactionManager", readOnly = true)
+    public Loan findLoanById(Long id) {
+        Loan loan = null;
+
+        try {
+            Optional<Loan> tmpOpt = loanRepository.findById(id);
+
+            if (tmpOpt.isPresent()) {
+                loan = tmpOpt.get();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.toString());
+        }
+
+        return loan;
+    }
+
+
+    @Transactional(value = "coreTransactionManager", readOnly = true)
+    public List<Loan> getAllLoansByIdList(List<Long> idList) {
+        List<Loan> tmpList = new ArrayList<>();
+
+        for (Long id : idList) {
+            tmpList.add(findLoanById(id));
+        }
+        logger.debug("Fetched {} Loans from db into a list.", tmpList.size());
+
+        return tmpList;
+    }
+
+
+    @Transactional(value = "coreTransactionManager", readOnly = false)
+    public Loan createNewLoan(Copy copy, Patron patron) {
+        Loan loan = new Loan(copy, patron);
+        loanRepository.save(loan);
+        logger.debug("Created new Loan id:{}, for Patron id:{}", copy.getId(), patron.getId());
+
+        return loan;
+    }
+
+
+    @Transactional(value = "coreTransactionManager", readOnly = false)
+    public Loan renewLoan(Loan loan) {
+        Loan renewedLoan = new Loan(loan);
+        loanRepository.save(renewedLoan);
+        logger.debug("Renewed Loan id:{}, it is now Loan id:{}", loan.getId(), renewedLoan.getId());
+
+        return renewedLoan;
     }
 }

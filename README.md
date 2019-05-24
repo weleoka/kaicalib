@@ -1,16 +1,17 @@
 # LTU - Bibliotekssystemet Grupp 8 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
 Educational project based on MVC architecture. Hibernate ORM to model to a RDBMS with Spring (Java EE) for client web application and backend services.
 
-Current build engine is Gradle and with mavenCentral repositories for dependency sourcing.
+Current build engine is Gradle and with mavenCentral repositories for dependency sourcing.  
+
+To see an operational deployment of this project please contact the developers for details on how to access the remote server simply using your browser!
+
 
 ## Developer environment
 The project is probably best using MySQL or MariaDB when in production. The connection details are in `src/main/java/resources/application.yml`. Included with the repository is DDL and useradd SQL for initialising the database. These are found in `db_user.sql`, `schema.sql` and `data.sql` files in `/resources`. It also assumes Java version 1.8 ( a.k.a Java 8).  
 The location of the sql files is implicitly found by Spring and will load by default the schema and the initial data when in a development environment or for initial deployment. The user creation scrip should be manually run.
 
-
 So in brief:
 - clone the repository
-- Run the relevant SQL file (`db_user.sql`) in your dbms to initiate database user
 - Run the gradle target `build` of ./gradlew (or if on windows gradle.bat) e.g. `./gradlew build` or `gradle.bat build`
 
 The project will compile and the tests will run. Gradle can display resulting output/feedback in a browser.  
@@ -117,30 +118,3 @@ Please see `build.gradle` for full dependencies list.
 
 
 Distributed under the MIT license. See [LICENSE.md](https://github.com/weleoka/bibliotekssystemet/LICENCE) for more information.
-
-
-
-
-# PART A
-The design of the system including identifying the business domain and architectural choices such as compartmentalisation and division of responsibilities between main system components. This initial stage of the project defers optimisation methods such as database denormalisation to later iterations of the product. 
-
-
-## System components
-The system is divided into these initial five components which, although are quite closely tied, can mostly be developed in isolation. They all rely on one domain model which should be implemented first, and a sample dataset is loaded for testing and development purposes.
-
-* ACCOUNT; guest, patron and librarian access levels
-* loan; handles objects and time-frames in connection with patrons 
-* notification; includes input of late objects list and reserved and/or loaned objects lists. Output is dependent on profile and notification types
-* CORE: search/query/find; expandable system which can cache, suggest, and provide additional information on objects
-* back-end access; the librarians back-end raw UI primarily concerned with crud and various summary data display
-
-
-## Modelling system design
-To support the design decisions the following diagrams are required.
-
-- Sequence diagram of log-in, searching and selecting for loan of multiple objects
-- Sequence diagram of how the system discovers overdue laons and adds them to a notification list and sends notifications automatically. (must involve timer, cron-job)
-- Domain model with entities and relationships
-
-
-# PART B

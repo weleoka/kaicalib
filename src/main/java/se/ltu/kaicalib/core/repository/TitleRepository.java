@@ -37,7 +37,7 @@ public interface TitleRepository extends JpaRepository<Title, Long> {
 
     // ********************** JpaRepository methods ********************** //
 
-    // public Title findById(Long id);
+    // public Title findLoanById(Long id);
     // public void save(Title title)
      */
 }

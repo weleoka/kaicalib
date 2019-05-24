@@ -38,27 +38,40 @@ public class Loan {
 
     /**
      * Required Hibernate no-args-constructor.
+     *
+     * Note that this instantly creates the loan.
+     *
      */
     public Loan() {}
 
+    /**
+     * Creates a new loan
+     *
+     * Note also that it calls makeLoan and creates the loan directly.
+     * To make a loan and not initialise it with dates call empty constructor and
+     * use setters to update properties, to then call makeLoan() when ready.
+     * @param copy
+     * @param patron
+     */
     public Loan(Copy copy, Patron patron) {
         this.copy = copy;
         this.patron = patron;
+        makeLoan();
     }
 
     /**
-     * Creates a new loan from and old one.
+     * Creates a new loan from an old one.
      * The new one is made with a start date from the
      * return date of the old one.
      * Note also that it internally calls
-     * makeLoan() to set the temporal properties.
+     * renewLoan() to set temporal properties.
      *
-     * @param loan
+     * @param loan the Loan object that is used to create the new one
      */
     public Loan(Loan loan) {
         this.copy = loan.getCopy();
         this.patron = getPatron();
-        makeLoan();
+        renewLoan();
     }
 
     // ********************** Accessor Methods ********************** //
@@ -100,10 +113,16 @@ public class Loan {
     //Loan->Copy->CopyType-(int)->Copy-(int)->Loan.makeLoan(int)
     private void makeLoan() {
         int loanTime = copy.getLoanTimeInWeeks();
-        LocalDate newReturnDate = LocalDate.now().plusWeeks(loanTime);
-        this.setReturnDate(newReturnDate);
+        LocalDate returnDate = LocalDate.now().plusWeeks(loanTime);
+        this.setReturnDate(returnDate);
     }
 
+    private void renewLoan() {
+        int loanTime = copy.getLoanTimeInWeeks();
+        LocalDate originalReturnDate = getReturnDate();
+        LocalDate newReturnDate = originalReturnDate.plusWeeks(loanTime);
+        this.setReturnDate(newReturnDate);
+    }
 
 
     // ********************** Common Methods ********************** //

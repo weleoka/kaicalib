@@ -8,16 +8,14 @@ import java.util.UUID;
 
 /**
  * This class would be used if only passing certain parts of the object
- * onwards, hence not allowing a full econstruction of an object from persistence.
- *
- * DTO / Data Transfer Object. That could be entirely the wrong name for classes like this.
+ * onwards, hence not requiring a full reconstruction of an object from persistence.
  *
  * It would be combined with data about other relevant objects. Which title it "owns"
- * and  the likes.
+ * and the likes.
  *
- * Decided also that this is completely unnecessary for this project as everything
- * has too be passed down int an HTTP layer. If moving json then possibly DTO's come
- * into play for providing an API with it's data in a convenient form.
+ * Decided is that this is completely unnecessary for this project as everything
+ * has too be passed down into an HTTP layer anyhow. If moving json then possibly DTO's come
+ * into play for providing an API endpoint with all it's data in a convenient form.
  */
 @Data
 public class CopyDTO {

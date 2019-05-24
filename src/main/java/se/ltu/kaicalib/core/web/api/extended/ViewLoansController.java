@@ -1,11 +1,11 @@
-package se.ltu.kaicalib.core.web.api;
+package se.ltu.kaicalib.core.web.api.extended;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import se.ltu.kaicalib.core.domain.entities.Loan;
 import se.ltu.kaicalib.core.domain.LoanWrapper;
+import se.ltu.kaicalib.core.domain.entities.Loan;
 import se.ltu.kaicalib.core.domain.entities.Patron;
 import se.ltu.kaicalib.core.repository.CopyRepository;
 import se.ltu.kaicalib.core.repository.LoanRepository;

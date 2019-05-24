@@ -1,9 +1,11 @@
-package se.ltu.kaicalib.core.web.api;
+package se.ltu.kaicalib.core.web.api.extended;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import se.ltu.kaicalib.core.domain.*;
+import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
+import se.ltu.kaicalib.core.domain.TitleSearchListWrapper;
+import se.ltu.kaicalib.core.domain.TitleWrapper;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.CopyType;
 import se.ltu.kaicalib.core.domain.entities.NormalCopyType;

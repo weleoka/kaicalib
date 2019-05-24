@@ -10,6 +10,8 @@ public class GenUtil {
      *
      * todo Create similar method that instead takes a mixed number args of mixed types
      *  and tries to make toString on them and then assemble into an Array.
+     *  This is needed because the MessageSource has such limited constructor options.
+     *
      *
      * @return
      */
