@@ -9,6 +9,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import se.ltu.kaicalib.core.domain.CheckoutList;
@@ -29,7 +30,8 @@ import static se.ltu.kaicalib.core.utils.GenUtil.toArr;
  *
  * These are restricted to the Role PATRON.
  *
- * todo add Session-based message feedback to avoid URL formatting corruption.
+ * todo add Session-based message feedback to avoid URL formatting corruption of titles
+ * todo the Controller should perhaps be called CheckoutController and some routes be moved out of here.
  *
  *
  * @author
@@ -140,16 +142,31 @@ public class LoanController {
         Model model) {
 
         if (usageTerms) {
+            // todo This is cutting corners.
+            //  There should be a redirect on success and receipt and msg passed in Session.
+            //  Another good usage of flashAttributes I think.
             Patron patron = patronService.getPatronForAuthUser();
             Receipt receipt = checkoutService.checkOut(checkoutList, patron);
             String msg = messageSource.getMessage("CheckoutList.checkout.success", toArr(String.valueOf(receipt.gettotalLoanCount())), null);
             model.addAttribute("success", msg);
-
-            return "/core/receipt";
+            model.addAttribute("receipt", receipt);
+            // todo add flashAttribute for Receipt instead.
+            // todo Check briefly the method of forward instead of redirect.... not certain it's needed but make sure.
+            return "redirect:receipt"; //return "/core/receipt";
         }
         String msg = messageSource.getMessage("CheckoutList.checkout.termsAndConditions", null, null);
         model.addAttribute("warn", msg);
 
-        return "redirect:checkout";
+        return "redirect:checkout"; //todo change to core/view_checkout
+    }
+
+
+    @GetMapping("/receipt")
+    public String viewReceipt(@ModelAttribute("flashAttribute") Receipt receipt, Model model) {
+        model.addAttribute("loans", receipt.getLoanlist());
+        model.addAttribute("renewedLoans", receipt.getRenewedLoanList());
+        // todo set up the template.
+        return "/core/view_receipt";
+
     }
 }

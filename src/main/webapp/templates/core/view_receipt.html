@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/layout :: headerFragment">
+    <title id="pageTitle">Checkout</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:include="fragments/navbar :: navbar"></div>
+    <span th:if="${success}" th:text="@{${success}}" class="alert alert-success"></span>
+
+    <div th:if="${not #lists.isEmpty(copies)}">
+        <h1>Copies to be checked out</h1>
+        <table>
+            <tr>
+                <th>Book Title</th>
+                <th>Loan Period</th>
+                <th> - </th>
+            </tr>
+
+            <tr th:each="copy : ${copies}" th:value>
+                <td th:text="${copy.title.name}">Title</td>
+                <td th:text="${copy.copyType.loanTimeInWeeks}">Loan period</td>
+                <td><a th:href="@{/checkout_remove_copy(id=${copy.id})}">Remove item</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(loans)}">
+        <h1>Loans to be renewed</h1>
+        <table>
+            <tr>
+                <th>Book Title</th>
+                <th>Original Return Date</th>
+                <th>New return date</th>
+                <th> - </th>
+            </tr>
+
+            <tr th:each="copy : ${loans}" th:value>
+                <td th:text="${loan.title.name}">Title</td>
+                <td th:text="${loan.returnDate}">Return Date</td> DISABLED Return Date is set on copy only.
+                <td>Not implemented</td>
+                <td><a th:href="@{/checkout_remove_loan(id=${loan.id})}">Don't renew loan</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(copies) || not #lists.isEmpty(loans)}">
+        <hr>
+        <form class="form-horizontal" role="form" method="POST" th:action="@{/checkout}">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="usageTermsCheckbox">Agree to libary terms and conditions</label>
+                    <input type="checkbox" th:checked="${usageTerms}" name="usageTerms" class="form-control" id="usageTermsCheckbox" required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-user-plus"></i>Confirm checkout
+                    </button>
+                <span th:if="${warn}" class="alert alert-warning" th:utext="${warn}"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${#lists.isEmpty(copies) && #lists.isEmpty(loans)}">Sorry, it's all empty here.</div>
+
+</div>
+
+<div th:replace="fragments/layout :: footerFragment"></div>
+</body>
+</html>

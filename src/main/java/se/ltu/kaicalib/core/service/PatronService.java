@@ -13,7 +13,7 @@ import se.ltu.kaicalib.core.repository.PatronRepository;
 
 /**
  * Facilitates interacting with Patron on the persistence level
- * in regards to authentication.
+ * in regards to authentication of the User.
  *
  *
  * @author

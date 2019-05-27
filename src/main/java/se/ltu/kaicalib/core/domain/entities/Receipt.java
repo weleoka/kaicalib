@@ -1,5 +1,7 @@
 package se.ltu.kaicalib.core.domain.entities;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  */
 public class Receipt {
 
-    private Patron patron;
+    private Patron patron; // Not really relevant as receipts are not stored anyhow.
     private List<Loan> loanlist;
     private List<Loan> renewedLoanList;
 
@@ -34,5 +36,13 @@ public class Receipt {
 
     public int gettotalLoanCount() {
         return loanlist.size() + renewedLoanList.size();
+    }
+
+    public List<Loan> getLoanlist() {
+        return loanlist;
+    }
+
+    public List<Loan> getRenewedLoanList() {
+        return renewedLoanList;
     }
 }
