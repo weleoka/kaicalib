@@ -13,7 +13,6 @@ import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Title;
 import se.ltu.kaicalib.core.repository.CopyRepository;
-import se.ltu.kaicalib.core.service.CopyService;
 import se.ltu.kaicalib.core.service.TitleService;
 
 import java.util.ArrayList;
@@ -25,22 +24,22 @@ import java.util.List;
  * displaying search results and also receiving search selections.
  *
  *
+ * @author
  */
 @Controller
 public class SearchController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private CopyRepository copyRepository;
     private TitleService titleService;
-    private CopyService copyService;
-    private CopyRepository copyRepository; // Yes going controller to repository is considered fine
-
     private List<Title> titles = new ArrayList<>();
 
 
     @Autowired
-    public SearchController(TitleService titleService, CopyService copyService, CopyRepository copyRepository) {
-        this.titleService = titleService;
-        this.copyService = copyService;
+    public SearchController(
+        CopyRepository copyRepository,
+        TitleService titleService) {
         this.copyRepository = copyRepository;
+        this.titleService = titleService;
     }
 
 
@@ -50,6 +49,14 @@ public class SearchController {
         model.addAttribute("command", command);
 
         return "core/search";
+    }
+
+
+    @GetMapping("/search_results")
+    public String showSearchResultsBlank(Model model) {
+        model.addAttribute("titles", titles);
+
+        return "core/search_results";
     }
 
 
@@ -70,21 +77,13 @@ public class SearchController {
     }
 
 
-    @GetMapping("/search_results")
-    public String showSearchResultsBlank(Model model) {
-        model.addAttribute("titles", titles);
-
-        return "core/search_results";
-    }
-
-
     @GetMapping("/search_selection") // todo Could use the new annotation and pass entire object...
     public String generalSearchResultsPage(@RequestParam("id") Long id, Model model) {
         Title title = titleService.findById(id);
         List<Copy> copies = copyRepository.findAllAvailableCopiesByTitle(title);
         model.addAttribute("title", title);
         model.addAttribute("copies", copies);
-        logger.debug("Fount a title and a few copies");
+        logger.debug("Found a title and a few copies");
 
         return "core/search_selection";
     }

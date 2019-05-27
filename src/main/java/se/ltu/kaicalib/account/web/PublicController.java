@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import se.ltu.kaicalib.account.domain.Role;
 import se.ltu.kaicalib.account.domain.User;
 import se.ltu.kaicalib.account.service.UserServiceImpl;
@@ -57,14 +58,15 @@ public class PublicController {
 
     /* ==== LOGIN ==================================================== */
      @GetMapping("/login")
-    public String getLoginPage(Principal principal) {
+    public String getLoginPage(Principal principal, @RequestParam(value = "msg", required = false) String msg, Model model) {
+         // model.addAttribute("msg", msg); // todo See todo description in login.html about custom msg.
 
-        if (principal != null) { // if logged in already redirect to home
+         if (principal != null) { // if logged in already redirect to home
 
             return "redirect:patron/profile";
-        }
+         }
 
-            return "account/public/login";
+         return "account/public/login";
     }
 
 

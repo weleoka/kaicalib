@@ -11,14 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class implementing application configuration from file.
+ * Class implementing application configuration from yaml
+ *
+ * Implemented due to multiple data sources requiring dedicated configurations
+ * not auto-configured by Spring.
+ *
+ * @author
  */
-//@Configuration
-//@EnableConfigurationProperties
-//@Validated
 @Component
-//@ConfigurationProperties("kaicalib") // prefix to find kaicalib.* values
-public class YAMLConfig {
+public class KaicalibYamlConfig {
 
     @Component
     @Validated

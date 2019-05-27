@@ -1,10 +1,11 @@
 package se.ltu.kaicalib.core.domain;
 
 import lombok.Data;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,37 +24,48 @@ import java.util.List;
  * available is not longer because they made it to the checkout too slowly, i.e. does temporary
  * reserving become important?
  *
+ * Interestingly @PostConstruct or @PreDestroy can be applied to this "HTTP Session management by bean" technique.
+ *
+ * @author
  *
  */
 @Component
-@Scope("checkout-list")
+@SessionScope // equivalent to @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
 public class CheckoutList implements Serializable {
-    private List<Long> copiesIds;
-    private List<Long> loansIds; // These are loans which are to be renewed
+    private List<Long> copiesIds = new ArrayList<>();
+    private List<Long> loansIds = new ArrayList<>(); // These are loans which are to be renewed
+
 
 
     /* ====== COPY ======================================== */
-
     public void addCopyId(Long copyId) {
         this.copiesIds.add(copyId);
     }
+
+
     public void removeCopyId(Long copyId) {
         this.copiesIds.remove(copyId);
     }
+
+
     public void emptyCheckoutCopyIds() {
         this.copiesIds.clear();
     }
 
 
-    /* ====== LOAN ======================================== */
 
+    /* ====== LOAN ======================================== */
     public void addLoanId(Long loanId) {
         this.loansIds.add(loanId);
     }
+
+
     public void removeLoanId(Long loanId) {
         this.loansIds.remove(loanId);
     }
+
+
     public void emptyCheckoutLoanIds() {
         this.loansIds.clear();
     }

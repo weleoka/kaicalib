@@ -1,19 +1,19 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-INSERT INTO `Copy` (`copy_id`, `copy_created_at`, `copy_return_date`, `curr_status`, `uuid`, `copyType_copy_type_id`, `title_title_id`) VALUES
-(3, '2019-05-17', '2019-05-17', 'available', '19c87ebd-8c2a-46ad-a278-b4eb93ea562c', 4, 2),
-(5, '2019-05-17', '2019-05-17', 'available', '6e5eb0ee-d821-465f-bbc8-bd0081e2a90b', 6, 2),
-(7, '2019-05-17', '2019-05-17', 'available', '37d4cd88-c487-46b3-984b-b58eb14b3fc7', 8, 2),
-(9, '2019-05-17', '2019-05-17', 'available', '225fa17a-26db-4495-893a-9a00a7a92979', 10, 2),
-(11, '2019-05-17', '2019-05-17', 'available', 'da469629-9a3c-42d7-aae9-8ceaca973f55', 12, 1),
-(13, '2019-05-17', '2019-05-17', 'available', '39d49ea6-de19-4eef-b08f-ab985dae7147', 14, 1),
-(15, '2019-05-17', '2019-05-17', 'available', '70e7eacc-41f6-4c7d-bbe9-dd1e2da2fe6c', 16, 1),
-(17, '2019-05-17', '2019-05-17', 'available', '1517dfef-ef7f-4531-acd0-c9dc0574bddd', 18, 1),
-(19, '2019-05-17', '2019-05-17', 'available', 'e0052621-64e6-47e6-9adc-b8a0d8f377f2', 20, 1),
-(21, '2019-05-17', '2019-05-17', 'available', '73993972-04d7-4dbd-8a21-502e0bb40bd2', 22, 1),
-(24, '2019-05-17', '2019-05-17', 'available', '200133b0-df64-474c-b201-6421cfdd7bbd', 25, 23),
-(26, '2019-05-17', '2019-05-17', 'available', '0065894e-64d2-4a9b-a007-d09305abaeab', 27, 23),
-(28, '2019-05-17', '2019-05-17', 'available', 'c8167b77-4b8f-41be-b1ce-0539dd82c6f4', 29, 23);
+INSERT INTO `Copy` (`copy_id`, `copy_created_at`, `curr_status`, `uuid`, `copyType_copy_type_id`, `title_title_id`) VALUES
+(3, '2019-05-17', 'available', '19c87ebd-8c2a-46ad-a278-b4eb93ea562c', 4, 2),
+(5, '2019-05-17', 'available', '6e5eb0ee-d821-465f-bbc8-bd0081e2a90b', 6, 2),
+(7, '2019-05-17', 'available', '37d4cd88-c487-46b3-984b-b58eb14b3fc7', 8, 2),
+(9, '2019-05-17', 'available', '225fa17a-26db-4495-893a-9a00a7a92979', 10, 2),
+(11, '2019-05-17', 'available', 'da469629-9a3c-42d7-aae9-8ceaca973f55', 12, 1),
+(13, '2019-05-17', 'available', '39d49ea6-de19-4eef-b08f-ab985dae7147', 14, 1),
+(15, '2019-05-17', 'available', '70e7eacc-41f6-4c7d-bbe9-dd1e2da2fe6c', 16, 1),
+(17, '2019-05-17', 'available', '1517dfef-ef7f-4531-acd0-c9dc0574bddd', 18, 1),
+(19, '2019-05-17', 'available', 'e0052621-64e6-47e6-9adc-b8a0d8f377f2', 20, 1),
+(21, '2019-05-17', 'available', '73993972-04d7-4dbd-8a21-502e0bb40bd2', 22, 1),
+(24, '2019-05-17', 'available', '200133b0-df64-474c-b201-6421cfdd7bbd', 25, 23),
+(26, '2019-05-17', 'available', '0065894e-64d2-4a9b-a007-d09305abaeab', 27, 23),
+(28, '2019-05-17', 'available', 'c8167b77-4b8f-41be-b1ce-0539dd82c6f4', 29, 23);
 
 INSERT INTO `Copy_type` (`type_discriminator`, `copy_type_id`, `loan_time`, `uuid`, `copy_copy_id`) VALUES
 ('NORMAL', 4, 4, '977eed97-d812-4614-992f-7da27ce68b7e', 3),
@@ -35,10 +35,14 @@ UPDATE `hibernate_sequence` SET `next_val` = 30;
 SET SQL_SAFE_UPDATES = 1;
 
 INSERT INTO `Patron` (`patron_id`, `createdAt`, `user_uuid`, `uuid`) VALUES
-(1, '2019-05-17', '6743a289-ac08-4a6f-87df-393ba95b86cc', '9b99623c-36b7-4701-94e0-422c056c2496'),
-(2, '2019-03-17', 'd4949f00-7c1e-4521-a99e-74f30fbf193a', '571314cf-2c87-4200-a282-e0ddec913513');
+-- unhex(replace(uuid(),'-',''))
+-- (1, '2019-05-17', 'd23bb6cf-7f41-42f1-ad6b-3e046ef7c312', '7f23098d-c8cb-4f16-8514-f0d67d0fdad1'),
+(1, '2019-05-17', unhex(replace('d23bb6cf-7f41-42f1-ad6b-3e046ef7c312','-','')), unhex(replace('7f23098d-c8cb-4f16-8514-f0d67d0fdad1','-',''))),
+-- (2, '2019-03-17', '014ff25d-c132-4b95-8aac-e593e9878759', '07998a99-2508-4bf6-b550-0408ad4cf04b');
+(2, '2019-03-17', unhex(replace('014ff25d-c132-4b95-8aac-e593e9878759','-','')), unhex(replace('07998a99-2508-4bf6-b550-0408ad4cf04b','-','')));
 
-INSERT INTO `Loan` (`id`, `createdAt`, `returnDate`, `uuid`, `copy_copy_id`, `patron_patron_id`) VALUES
+
+INSERT INTO `Loan` (`id`, `created_at`, `loan_return_date`, `uuid`, `copy_copy_id`, `patron_patron_id`) VALUES
 (1, '2019-05-17', '2019-07-17', '19c87ebd-8c2a-46ad-a278-b4eb93ea123c', 3, 2);
 
 INSERT INTO `Title` (`title_id`, `created_at`, `title_name`, `uuid`) VALUES

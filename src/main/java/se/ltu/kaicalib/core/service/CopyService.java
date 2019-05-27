@@ -13,14 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Facilitates easy retrieveal of copy objects for the use in
+ * higher layers, mostly controllers.
+ *
+ *
+ * @author
+ */
 @Transactional(value = "coreTransactionManager")
 @Service
 public class CopyService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private CopyRepository copyRepository;
 
+
     @Autowired
-    CopyService(CopyRepository copyRepository) {
+    public CopyService(CopyRepository copyRepository) {
         this.copyRepository = copyRepository;
     }
 

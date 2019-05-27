@@ -8,7 +8,7 @@
 <div class="masthead" th:fragment="navbar">
 
     <div class="header">
-        <img th:src="@{~/images/logo.png}" alt="logo" />
+        <a href="/"> <img th:src="@{~/images/logo.png}" alt="logo" /></a>
         <h1>Kaica_Lib Online!</h1>
     </div>
 
@@ -21,12 +21,12 @@
                         <a sec:authorize="isAuthenticated()" th:href="@{/patron/profile}">Home</a>
                         <a sec:authorize="!isAuthenticated()" th:href="@{/}">Home</a>
                     </li>
-                    <li><a th:href="@{/patron/view_loans}">Loans</a></li>
-                    <li><a th:href="@{/patron/view_reservations}">Reservations</a></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/patron/view_loans}">Loans</a></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/patron/view_reservations}">Reservations</a></li>
 
                     <li><a th:href="@{/search}">Search</a></li>
 
-                    <li><a th:href="@{/patron/checkout}">Checkout</a><br></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/checkout}">Checkout</a><br></li>
 
                     <li><a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a></li>
                     <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
@@ -35,6 +35,7 @@
         </div>
         <div> Hello:
             <span sec:authentication="name">logged-in-users-username</span>
+            <div th:if="${sessionDuration}" th:utext="${'(session ' + sessionDuration + ' seconds)'}"></div>
             <span sec:authorize="hasRole('ADMIN')">(auth submit a form for testing ADMIN)</span>
         </div>
     </div><!-- /.navbar -->

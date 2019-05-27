@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import se.ltu.kaicalib.core.domain.CheckoutList;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Loan;
+import se.ltu.kaicalib.core.domain.entities.Patron;
 import se.ltu.kaicalib.core.domain.entities.Receipt;
 import se.ltu.kaicalib.core.service.CheckoutService;
 import se.ltu.kaicalib.core.service.CopyService;
@@ -28,6 +29,10 @@ import static se.ltu.kaicalib.core.utils.GenUtil.toArr;
  *
  * These are restricted to the Role PATRON.
  *
+ * todo add Session-based message feedback to avoid URL formatting corruption.
+ *
+ *
+ * @author
  */
 @Controller
 @Secured("PATRON")
@@ -42,7 +47,7 @@ public class LoanController {
 
 
     @Autowired
-    LoanController(
+    public LoanController(
         PatronService patronService,
         LoanService loanService,
         CopyService copyService,
@@ -58,9 +63,8 @@ public class LoanController {
     }
 
 
-
     /* ====== COPY and TITLES ================================= */
-    // todo recieve selected copy to add to checkout not a title.
+    // todo receive selected copy to add to checkout not a title.
 
     @GetMapping("/checkout_add_title")
     public String addCopyToCheckout(@RequestParam("id") Long titleId, Model model) {
@@ -107,7 +111,7 @@ public class LoanController {
     }
 
 
-    @GetMapping("/view_loans")
+    @GetMapping("/patron/view_loans")
     public String viewLoans(Model model) {
         model.addAttribute("loans", loanService.getAllLoansForPatron());
 
@@ -132,18 +136,19 @@ public class LoanController {
 
     @PostMapping("/checkout")
     public String proceedWithCheckout(
-        @RequestParam(value = "libraryterms") Boolean libraryterms,
+        @RequestParam(value = "usageTerms") Boolean usageTerms,
         Model model) {
 
-        if (libraryterms) {
-            Receipt receipt = checkoutService.checkOut(checkoutList, patronService.getPatronForAuthUser());
+        if (usageTerms) {
+            Patron patron = patronService.getPatronForAuthUser();
+            Receipt receipt = checkoutService.checkOut(checkoutList, patron);
             String msg = messageSource.getMessage("CheckoutList.checkout.success", toArr(String.valueOf(receipt.gettotalLoanCount())), null);
             model.addAttribute("success", msg);
 
             return "/core/receipt";
         }
         String msg = messageSource.getMessage("CheckoutList.checkout.termsAndConditions", null, null);
-        model.addAttribute("success", msg);
+        model.addAttribute("warn", msg);
 
         return "redirect:checkout";
     }

@@ -15,6 +15,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
+
+/**
+ * Persistence layer configuration for the core
+ * of the Kaicalib application.
+ *
+ * @author
+ */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -25,7 +32,7 @@ import javax.sql.DataSource;
 public class CoreDbConfig {
 
     @Autowired
-    YAMLConfig.CoreJpaProperties coreJpaProperties;
+    KaicalibYamlConfig.CoreJpaProperties coreJpaProperties;
 
 
     @Bean(name="coreDatasourceProperties")

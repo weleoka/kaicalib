@@ -7,6 +7,7 @@ import se.ltu.kaicalib.core.domain.entities.Patron;
 
 import java.util.Optional;
 
+
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     public Optional<Loan> findLoansByPatron(Patron patron);

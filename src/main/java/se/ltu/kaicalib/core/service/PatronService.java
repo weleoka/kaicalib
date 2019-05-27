@@ -11,7 +11,14 @@ import se.ltu.kaicalib.core.domain.entities.Patron;
 import se.ltu.kaicalib.core.repository.PatronRepository;
 
 
-@Transactional(value = "coreTransactionManager", readOnly = true)
+/**
+ * Facilitates interacting with Patron on the persistence level
+ * in regards to authentication.
+ *
+ *
+ * @author
+ */
+@Transactional(value = "coreTransactionManager")
 @Service
 public class PatronService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -20,15 +27,19 @@ public class PatronService {
 
 
     @Autowired
-    PatronService(UserServiceImpl userService, PatronRepository patronRepository) {
+    public PatronService(
+        UserServiceImpl userService,
+        PatronRepository patronRepository) {
         this.userService = userService;
         this.patronRepository = patronRepository;
     }
 
 
+    @Transactional(value = "coreTransactionManager", readOnly = true)
     public Patron getPatronForAuthUser() {
         User user = userService.getAuthUser();
+        Patron patron = patronRepository.getPatronByUserUuid(user.getUuid());
 
-        return patronRepository.getPatronByUserUuid(user.getUuid());
+        return patron;
     }
 }

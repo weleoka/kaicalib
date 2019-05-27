@@ -16,6 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Facilitates easy retrieval and manipulation of
+ * mostly of objects Patron and Copy and the relationship
+ * between them in rerspect to the Loan object.
+ *
+ *
+ * @author
+ */
 @Transactional(value = "coreTransactionManager")
 @Service
 public class LoanService {
@@ -43,10 +51,19 @@ public class LoanService {
      *
      * @return
      */
+    @Transactional(value = "coreTransactionManager", readOnly = true)
     public List<Loan> getAllLoansForPatron() {
         Patron patron = patronService.getPatronForAuthUser();
+        List<Loan> list = new ArrayList<>();
 
-        return patron.getLoans();
+        try {
+            list = patron.getLoans();
+
+        } catch (NullPointerException e) {
+            logger.debug("Empty loan list: {}", e.toString());
+        }
+
+        return list;
     }
 
 
@@ -91,6 +108,7 @@ public class LoanService {
      * @param titleId
      * @return
      */
+    @Transactional(value = "coreTransactionManager", readOnly = true)
     public Copy getCopyForNewLoan(Long titleId) {
         // if patron has no debt
         // if the maximum loan per year is reached
@@ -101,6 +119,13 @@ public class LoanService {
     }
 
 
+    /**
+     * Retrieves loans by the loan id and handles
+     * the Optional object or exception results.
+     *
+     * @param id
+     * @return
+     */
     @Transactional(value = "coreTransactionManager", readOnly = true)
     public Loan findLoanById(Long id) {
         Loan loan = null;
@@ -121,6 +146,14 @@ public class LoanService {
     }
 
 
+    /**
+     *  Takes a list of ids and retrieves the
+     *  loans under the corresponding ids and returns a list
+     *  of Loan objects.
+     *
+     * @param idList
+     * @return
+     */
     @Transactional(value = "coreTransactionManager", readOnly = true)
     public List<Loan> getAllLoansByIdList(List<Long> idList) {
         List<Loan> tmpList = new ArrayList<>();
@@ -134,21 +167,35 @@ public class LoanService {
     }
 
 
-    @Transactional(value = "coreTransactionManager", readOnly = false)
+    /**
+     * Creates a new loan from copy and patron information
+     *
+     * @param copy
+     * @param patron
+     * @return
+     */
     public Loan createNewLoan(Copy copy, Patron patron) {
         Loan loan = new Loan(copy, patron);
         loanRepository.save(loan);
-        logger.debug("Created new Loan id:{}, for Patron id:{}", copy.getId(), patron.getId());
+        logger.debug("Created new Loan of {}", copy.getTitle());
 
         return loan;
     }
 
 
-    @Transactional(value = "coreTransactionManager", readOnly = false)
+    /**
+     * Creates a new loan from an old loan object,
+     * and persists the new one.
+     *
+     * todo remove the old loan object!
+     *
+     * @param loan
+     * @return
+     */
     public Loan renewLoan(Loan loan) {
         Loan renewedLoan = new Loan(loan);
         loanRepository.save(renewedLoan);
-        logger.debug("Renewed Loan id:{}, it is now Loan id:{}", loan.getId(), renewedLoan.getId());
+        logger.debug("Renewed Loan id:{}", loan.getId());
 
         return renewedLoan;
     }

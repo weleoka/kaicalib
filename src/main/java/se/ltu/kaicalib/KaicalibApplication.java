@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import se.ltu.kaicalib.core.config.YAMLConfig;
+import se.ltu.kaicalib.core.config.KaicalibYamlConfig;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +19,7 @@ public class KaicalibApplication {
     private static Logger logger = LoggerFactory.getLogger(KaicalibApplication.class);
 
     @Autowired
-    private YAMLConfig myConfig;
+    private KaicalibYamlConfig yamlConfig;
 
     public static void main(String[] args) {
         logger.debug("STARTING APPLICATION!");
@@ -28,8 +28,7 @@ public class KaicalibApplication {
 
     @PostConstruct
     private void init(){
-        logger.info("Spring Boot - @ConfigurationProperties annotation example");
-        logger.info(myConfig.toString());
+        logger.info(yamlConfig.toString());
     }
 
 }

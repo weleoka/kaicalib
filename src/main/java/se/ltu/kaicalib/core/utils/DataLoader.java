@@ -7,7 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
-import se.ltu.kaicalib.core.config.YAMLConfig;
+import se.ltu.kaicalib.core.config.KaicalibYamlConfig;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -20,6 +20,9 @@ import javax.sql.DataSource;
  * This is for development and testing purposes.
  *
  * Just comment out the Bean annotation and it will stop the loading of sample data.
+ *
+ *
+ * @author
  */
 @Component
 public class DataLoader {
@@ -27,16 +30,16 @@ public class DataLoader {
     private DataSource coreDataSource;
     private DataSource accountsDataSource;
 
-    private YAMLConfig.CoreJpaProperties coreJpaProperties;
-    private YAMLConfig.AccountJpaProperties accountJpaProperties;
+    private KaicalibYamlConfig.CoreJpaProperties coreJpaProperties;
+    private KaicalibYamlConfig.AccountJpaProperties accountJpaProperties;
 
     @Autowired
     public DataLoader(
         DataSource coreDataSource,
         @Qualifier("accountsDataSource")
             DataSource accountsDataSource,
-        YAMLConfig.CoreJpaProperties coreJpaProperties,
-        YAMLConfig.AccountJpaProperties accountJpaProperties)
+        KaicalibYamlConfig.CoreJpaProperties coreJpaProperties,
+        KaicalibYamlConfig.AccountJpaProperties accountJpaProperties)
     {
         this.coreDataSource = coreDataSource;
         this.accountsDataSource = accountsDataSource;

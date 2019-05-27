@@ -12,20 +12,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import se.ltu.kaicalib.account.domain.User;
 import se.ltu.kaicalib.account.service.UserServiceImpl;
 import se.ltu.kaicalib.account.utils.RoleNotValidException;
 import se.ltu.kaicalib.account.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 /**
  * Controller handling the basic actions of what is known as
  * a patron according to the business rules.
  *
- *
- * @author
  */
 @Controller
 @Secured("PATRON")
@@ -98,13 +99,21 @@ public class PatronController {
         return "account/patron/details";
     }
 
+
     @GetMapping("/patron/profile")
-    public String getProfile(HttpServletRequest request, Model model) {
+    public String getProfile(
+        HttpServletRequest request,
+        Model model,
+        @SessionAttribute(name = "sessionStartTime") LocalDateTime startDateTime) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Duration duration = Duration.between(startDateTime, LocalDateTime.now());
+
         model
             .addAttribute("uri", request.getRequestURI())
             .addAttribute("user", auth.getName())
-            .addAttribute("roles", auth.getAuthorities());
+            .addAttribute("roles", auth.getAuthorities())
+            .addAttribute("sessionDuration", duration.getSeconds());
 
         return "account/patron/profile";
     }

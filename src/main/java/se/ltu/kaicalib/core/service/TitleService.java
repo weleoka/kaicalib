@@ -16,8 +16,12 @@ import java.util.Optional;
 public class TitleService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     private TitleRepository titleRepository;
+
+    @Autowired
+    public TitleService(TitleRepository titleRepository) {
+        this.titleRepository = titleRepository;
+    }
 
     public List<Title> findByTitle (String str) {
         return titleRepository.findFirst20ByNameContaining(str);

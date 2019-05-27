@@ -77,6 +77,19 @@ td {
 
 
 
+#usageTermsCheckbox {
+    width: initial;
+    display: inline-block;
+    float: right;
+}
+
+
+.footer {
+    padding: 2em;
+    text-align: center;
+}
+
+
 .header img {
     float: left;
     width: 100px;

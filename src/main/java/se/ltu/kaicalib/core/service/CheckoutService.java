@@ -2,6 +2,7 @@ package se.ltu.kaicalib.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.ltu.kaicalib.core.domain.CheckoutList;
@@ -14,13 +15,14 @@ import java.util.List;
 
 
 /**
- * Service that provides an easy junction between
- * loan and copy for especially managing the creation of new loans.
+ * Facilitates easy junction between loan and copy,
+ * especially managing the creation of new loans.
  *
- * It also can act as an intermediate in the creation of receipts. Although
- * currently no pre-processing of values passed set for Receipt takes place.
+ * It also can act as an intermediate in the creation of receipts.
+ * todo pre-processing of values passed for Receipt.
  *
  *
+ * @author
  */
 @Transactional(value = "coreTransactionManager")
 @Service
@@ -30,9 +32,8 @@ public class CheckoutService {
     private CopyService copyService;
 
 
-    public CheckoutService(
-        LoanService loanService,
-        CopyService copyService) {
+    @Autowired
+    public CheckoutService(LoanService loanService, CopyService copyService) {
         this.loanService = loanService;
         this.copyService = copyService;
     }
@@ -62,6 +63,10 @@ public class CheckoutService {
             Loan renewedLoan = loanService.renewLoan(loan);
             receipt.addRenewedLoan(renewedLoan);
         }
+        checkoutList.emptyCheckoutCopyIds();
+        checkoutList.emptyCheckoutLoanIds();
+
+        logger.debug("Created {} loans for patron id: {}", receipt.gettotalLoanCount(), patron.getId());
 
         return receipt;
     }

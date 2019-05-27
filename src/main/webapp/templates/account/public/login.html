@@ -19,7 +19,12 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6" >
-                empty div
+            <!--    This was done so that if the user accesses a restricted part they can get a custom message returned
+                with the redirect to the login form. (You need to loh in to view your loans for example)
+                However as spring security incercepts the request there is no chance to set any variables. The
+                param.login, param.error and param.warning seem to be set true and false internally by spring.
+                Currently this is standing open as an issue todo ! Info or help appreciated!
+                <div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"></div> -->
             </div>
         </div>
 

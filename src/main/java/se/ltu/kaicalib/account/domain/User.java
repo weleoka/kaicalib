@@ -8,6 +8,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+
+/**
+ * Represents a user that can authenticate
+ *
+ * todo Make UUID into BINARY(16) form for all UUID's.
+ */
 @Entity
 @Table(name = "user")
 @Data
@@ -17,8 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Type(type="uuid-char")
-    @Column(nullable=false, unique=true) // todo I think this is expensive to check for unique. Should assume that uuid is always unique for performance reasons. (Allthough not in this application certainly).
+    //@Type(type="uuid-char")
+    @Type(type="uuid-binary")
+    @Column(nullable=false, columnDefinition="BINARY(16)")
     final private UUID uuid = UUID.randomUUID();
 
     @Column
@@ -36,7 +43,7 @@ public class User {
     @Column
     private String address;
 
-    @Column
+    @Column(columnDefinition="VARCHAR(75)")
     private String password;
 
     @Transient
@@ -45,7 +52,8 @@ public class User {
     @Column
     private int active;
 
-    @Column(name = "patron_uuid")
+    @Type(type="uuid-binary")
+    @Column(name = "patron_uuid", columnDefinition="BINARY(16)")
     private UUID patronUuid;
 
 /*
@@ -81,6 +89,9 @@ public class User {
         this.password = password;
         this.roles = authorities;
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {

@@ -10,6 +10,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+
+/**
+ * Representing a patron that can interact with the library system.
+ *
+ * Debts, loans, reservations, receipts all go back to this entity.
+ *
+ * todo Make UUID into BINARY(16), for for all UUID's in fact.
+ */
 @Entity
 @Table(name = "Patron")
 public class Patron {
@@ -19,8 +27,8 @@ public class Patron {
     @Column(name = "patron_id", updatable = false, nullable = false)
     private Long id;
 
-    @Type(type="uuid-char")
-    @Column(nullable=false, unique=true)
+    @Type(type="uuid-binary")
+    @Column(nullable=false, columnDefinition="BINARY(16)")
     final private UUID uuid = UUID.randomUUID();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -29,7 +37,8 @@ public class Patron {
 
     private LocalDate createdAt; // Need this really?
 
-    @Column(name = "user_uuid")
+    @Type(type="uuid-binary")
+    @Column(name = "user_uuid", nullable = false, columnDefinition="BINARY(16)")
     private UUID userUuid;
 
     /**
@@ -99,7 +108,7 @@ public class Patron {
             return false;
         }
         Patron patron = (Patron) obj;
-        return uuid != null && uuid.equals(patron.uuid);
+        return uuid.equals(patron.uuid);
     }
 
     @Override

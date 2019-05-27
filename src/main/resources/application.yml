@@ -149,13 +149,13 @@ logging:
 kaicalib:
     account:
         jpa:
-            ddl_auto: update
+            ddl_auto: validate
             dialect: org.hibernate.dialect.MySQL5Dialect
         load_initial: false
 
     core:
         jpa:
-            ddl_auto: update
+            ddl_auto: validate
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         load_initial: false
 
@@ -177,7 +177,7 @@ datasource:
     name: HSQL-datasource
     #shutdown=true can be used in the url to disable the database's automatic shutdown.
     #url: jdbc:hsqldb:file:./hsqldb_data/testdb
-    url: jdbc:hsqldb:mem:bibsys_db
+    url: jdbc:hsqldb:mem:kaicalib_db
     platform: all # all is default for data.sql and schema.sql files for loading.
 
 
@@ -197,9 +197,9 @@ datasource:
     username: auser
     password: apass
     name: H2-datasource
-    url: jdbc:h2:mem:bibsys_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:kaicalib_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     #initialize: true # Reading of schema.sql and data.sql files.
-    #url: jdbc:h2:mem:bibsys_db;DB_CLOSE_DELAY=-1;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS calendar
+    #url: jdbc:h2:mem:kaicalib_db;DB_CLOSE_DELAY=-1;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS calendar
     #url: jdbc:h2:file:~/h2/app_db;
 
     # https://h2database.com/html/features.html#connection_modes
@@ -226,10 +226,10 @@ spring:
         #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # should work as well as through hibernate property
 
 datasource:
-    username: bibsys_db_user
+    username: kaicalib_db_user
     password: enter112
     name: MariaDB-datasource
-    url: jdbc:mysql://localhost:3306/bibsys_db?useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/kaicalib_db?useLegacyDatetimeCode=false&serverTimezone=UTC
 
 
 
@@ -242,10 +242,10 @@ spring:
     profiles: datasource-accounts-mysql
 
 accounts-datasource:
-    username: bibsys_db_user
+    username: kaicalib_db_user
     password: enter112
     name: MariaDB-accounts-datasource
-    url: jdbc:mysql://localhost:3306/bibsys_accounts_db?useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/kaicalib_accounts_db?useLegacyDatetimeCode=false&serverTimezone=UTC
     #platform: account # data-account.sql and schema-account.sql for preloading
     initialization-mode: always
 

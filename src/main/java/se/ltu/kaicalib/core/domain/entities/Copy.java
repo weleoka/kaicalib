@@ -32,12 +32,11 @@ public class Copy {
     private Title title;
 
     @OneToOne(cascade = CascadeType.ALL)
-    //@Column
     private CopyType copyType;
 
     //TODO store on loan only?
-    @Column(name = "copy_return_date")
-    private LocalDate retDate;
+    //@Column(name = "copy_return_date")
+    //private LocalDate returnDate;
 
     @Basic
     @Column(name = "copy_created_at")
@@ -58,7 +57,6 @@ public class Copy {
         this.title = title;
         this.status = "available";
         //todo placeholder, add logic
-        this.retDate = LocalDate.now();
         //TODO ugly placeholder logic, refactor
         if (type.equals("reference")) {
             this.copyType = new RefCopyType();
@@ -95,12 +93,6 @@ public class Copy {
 
     public CopyType getCopyType() { return this.copyType; }
 
-    //TODO think about where retDate logic goes
-    //TODO PLACEHOLDER, PASS TO CopyType-object
-    /**
-     * @return the date that was set to the return date
-     */
-    public void setRetDate(LocalDate retDate) { this.retDate = retDate; }
 
 
     // ********************** Model Methods ********************** //

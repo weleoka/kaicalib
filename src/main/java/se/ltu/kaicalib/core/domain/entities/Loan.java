@@ -24,9 +24,11 @@ public class Loan {
     @Column(nullable=false, unique=true)
     final private UUID uuid = UUID.randomUUID();
 
+    @Column(name = "loan_return_date")
     private LocalDate returnDate;
 
     //todo this might not work as intended if the entity is not persisted before it's used? Think!
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
     //TODO currently using 1-1 on loan, so each loan is of a single Copy

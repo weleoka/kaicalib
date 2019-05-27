@@ -39,7 +39,7 @@ This section is not completed but notes in progress.
 - Make sure the /console (for H2 database) mapping in Spring Security is disabled.
 - `.csrf().disable()` change this as H2 database console is not required in production.
 - `.headers().frameOptions().disable()` This is also to do with H2 db debugging.
-
+- UUID's should be stored as Binary 16 universally. See code in Patron and User as example
 
 ### Notes
 A few notes on issues discovered or other general points of interest.  
