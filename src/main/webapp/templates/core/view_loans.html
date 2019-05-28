@@ -10,22 +10,24 @@
 <div class="container">
     <div th:include="fragments/navbar :: navbar"></div>
 
-    <table>
-        <tr>
-            <th>Book Title</th>
-            <th>Loaned At</th>
-            <th>Return Date</th>
-            <th>Renew Loan</th>
-        </tr>
-        <tr th:each="loan : ${loans}" th:value>
-            <td th:text="${loan.copy.title.name}">Loan Title Name</td>
-            <td th:text="${loan.createdAt}">Loan Created Date</td>
-            <td th:text="${loan.returnDate}">Loan Return Date</td>
-            <td><a th:href="@{/checkout_renew_loan(id=${loan.id})}">Renew loan</a></td>
-        </tr>
-    </table>
+    <div th:if="${not #lists.isEmpty(loans)}">
+        <table>
+            <tr>
+                <th>Book Title</th>
+                <th>Loaned At</th>
+                <th>Return Date</th>
+                <th>Renew Loan</th>
+            </tr>
+            <tr th:each="loan : ${loans}" th:value>
+                <td th:text="${loan.copy.title.name}">Loan Title Name</td>
+                <td th:text="${loan.createdAt}">Loan Created Date</td>
+                <td th:text="${loan.returnDate}">Loan Return Date</td>
+                <td><a th:href="@{/checkout_renew_loan(id=${loan.id})}">Renew loan</a></td>
+            </tr>
+        </table>
+    </div>
 
-    <div th:if="${loans}" class="alert alert-success">No loans currently registered.</div>
+    <div th:if="${#lists.isEmpty(loans)}" class="alert alert-success">No loans currently registered.</div>
 
 </div>
 

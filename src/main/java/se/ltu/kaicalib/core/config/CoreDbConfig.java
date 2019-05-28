@@ -10,9 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 
@@ -25,14 +28,20 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    entityManagerFactoryRef = "entityManagerFactory",
+    entityManagerFactoryRef = "coreEntityManagerFactory",
     transactionManagerRef = "coreTransactionManager",
     basePackages = {"se.ltu.kaicalib.core"}
 )
 public class CoreDbConfig {
 
+    private KaicalibYamlConfig.CoreJpaProperties coreJpaProperties;
+
     @Autowired
-    KaicalibYamlConfig.CoreJpaProperties coreJpaProperties;
+    public CoreDbConfig(
+        KaicalibYamlConfig.CoreJpaProperties coreJpaProperties
+    ) {
+        this.coreJpaProperties = coreJpaProperties;
+    }
 
 
     @Bean(name="coreDatasourceProperties")
@@ -42,31 +51,40 @@ public class CoreDbConfig {
     }
 
 
-    @Bean(name = "dataSource")
     @Primary
+    @Bean(name = "coreDataSource")
     @ConfigurationProperties("datasource.configuration")
-    public DataSource dataSource() {
+    public DataSource coreDataSource() {
         DataSourceProperties dsp = dataSourceProperties();
         return dsp.initializeDataSourceBuilder()
             .type(HikariDataSource.class).build();
     }
 
 
-    @Bean(name="coreTransactionManager")
+/*    @Bean(name="coreTransactionManager")
     DataSourceTransactionManager transactionManager(DataSource datasource) {
         DataSourceTransactionManager txm  = new DataSourceTransactionManager(datasource);
         return txm;
-    }
-
+    }*/
 
     @Primary
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
+    @Bean(name="coreTransactionManager")
+    public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder) {
+        JpaTransactionManager tm = new JpaTransactionManager();
+        tm.setEntityManagerFactory(coreEntityManagerFactory(builder).getObject());
+        tm.setDataSource(coreDataSource());
+        return tm;
+    }
+
+    @Primary
+    @Bean(name = "coreEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean coreEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
-            .dataSource(dataSource())
+            .dataSource(coreDataSource())
             .packages(new String[] {"se.ltu.kaicalib.core"})
-            .persistenceUnit("bibsys-core")
+            .persistenceUnit("kaicalib-core")
             .properties(coreJpaProperties.getJpaProperties())
+            //.setPersistenceProviderClass(org.hibernate.ejb.HibernatePersistence.class);
             .build();
     }
 }

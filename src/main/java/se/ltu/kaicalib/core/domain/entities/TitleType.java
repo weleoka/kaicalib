@@ -17,8 +17,8 @@ public abstract class TitleType {
     @Column(name = "title_type_id", updatable = false, nullable = false)
     private Long id;
 
-    @Type(type="uuid-char")
-    @Column(nullable=false, unique=true)
+    @Type(type="uuid-binary")
+    @Column(nullable=false, columnDefinition="BINARY(16)")
     final private UUID uuid = UUID.randomUUID();
 
     /**

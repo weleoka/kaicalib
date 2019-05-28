@@ -1,9 +1,12 @@
 package se.ltu.kaicalib.core.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import se.ltu.kaicalib.KaicalibApplication;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,7 +26,7 @@ public class KaicalibYamlConfig {
 
     @Component
     @Validated
-    @ConfigurationProperties("kaicalib.account.jpa")
+    @ConfigurationProperties//(prefix = "kaicalib.account")//("kaicalib.account.jpa")
     public static class AccountJpaProperties {
 
         @NotEmpty
@@ -34,6 +37,10 @@ public class KaicalibYamlConfig {
         @Value("${kaicalib.account.jpa.dialect}")
         private String dialect;
 
+        //@NotEmpty
+        @Value("${kaicalib.account.jpa.storage_engine}")
+        private String storage_engine;
+
         @NotNull
         @Value("${kaicalib.account.load_initial}")
         private boolean load_initial;
@@ -42,6 +49,7 @@ public class KaicalibYamlConfig {
             Map<String, Object> props = new HashMap<>();
             props.put("hibernate.hbm2ddl.auto", this.ddl_auto);
             props.put("hibernate.dialect",  this.dialect);
+            props.put("hibernate.dialect.storage_engine",  this.storage_engine);
 
             return props;
         }
@@ -53,7 +61,7 @@ public class KaicalibYamlConfig {
 
     @Component
     @Validated
-    @ConfigurationProperties("kaicalib.core.jpa")
+    @ConfigurationProperties//("kaicalib.core.jpa")
     public static class CoreJpaProperties {
 
         @NotEmpty
@@ -64,6 +72,10 @@ public class KaicalibYamlConfig {
         @Value("${kaicalib.core.jpa.dialect}")
         private String dialect;
 
+        //@NotEmpty
+        @Value("${kaicalib.core.jpa.storage_engine}")
+        private String storage_engine;
+
         @NotNull
         @Value("${kaicalib.core.load_initial}")
         private boolean load_initial;
@@ -72,7 +84,7 @@ public class KaicalibYamlConfig {
             Map<String, Object> props = new HashMap<>();
             props.put("hibernate.hbm2ddl.auto", this.ddl_auto);
             props.put("hibernate.dialect",  this.dialect);
-            // org.hibernate.dialect.MySQL5InnoDBDialect //MySQL5Dialect.
+            props.put("hibernate.dialect.storage_engine",  this.storage_engine);
 
             return props;
         }

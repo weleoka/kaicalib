@@ -64,21 +64,17 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<Role>(Arrays.asList(role)));
 
         if (role == null) {
+
             throw new RoleNotValidException("User being assigned invalid role of type: " + roleStr);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(1);
         Patron patron = new Patron(user.getUuid());
         user.setPatronUuid(patron.getUuid());
-
-
-
 /*        Set<Role> roles = new HashSet<>(); // multiple roles not supported yet
         roles.add(role);
         user.setRoles(roles);*/
-
         userRepository.save(user);
-
         logger.debug("Created new user (ID: {}, with roles: {})", user.getUsername(), user.getRoles());
     }
 
@@ -92,15 +88,34 @@ public class UserServiceImpl implements UserService {
 
     /* ============== LOGIN PROCESS ================= */
     // todo Make it possible to have multiple different roles...for fun? Currently only allow the first role in set (no order).
-
+    /**
+     * Standard route of logging in a user object from a login form.
+     *
+     * @param user
+     */
     public void login(User user) {
         SecurityContextHolder.getContext().setAuthentication(authenticate(user));
     }
 
-    private Authentication authenticate(User user) { //user.getPassword()
+
+    /**
+     * Login a user programmatically supplying the password, i.e. not from a form.
+     *
+     * Used for testing purposes.
+     *
+     * todo production check
+     *
+     * @param user
+     * @param password
+     */
+    public void login (User user, String password) {
+        user.setPassword(password);
+        login(user);
+    }
+
+    private Authentication authenticate(User user) {
 
         return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), Collections.singleton(createAuthority(user)));
-        //return new UsernamePasswordAuthenticationToken(user, user.getPassword(), Collections.singleton(createAuthority(user)));
     }
 
     private GrantedAuthority createAuthority(User user) {
@@ -117,6 +132,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    /**
+     * Convenience method to return the current auth user
+     * from the security context.
+     *
+     * @return
+     */
     public User getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();

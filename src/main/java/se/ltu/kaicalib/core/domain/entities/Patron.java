@@ -31,8 +31,14 @@ public class Patron {
     @Column(nullable=false, columnDefinition="BINARY(16)")
     final private UUID uuid = UUID.randomUUID();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OrderBy("returnDate DESC")
+    @OneToMany(
+        mappedBy = "patron",        // i.e. patron attribute in Loan
+        fetch = FetchType.EAGER
+        //cascade = CascadeType.ALL // Nothing that happens to patron should affect their loans.
+    )
+    //@JoinColumn(name = "patron_id")
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@OrderBy("returnDate DESC")
     private List<Loan> loans;
 
     private LocalDate createdAt; // Need this really?
@@ -53,6 +59,8 @@ public class Patron {
     public Patron(ArrayList<Loan> loans) {
         this.loans = loans;
     }
+
+
 
     // ********************** Accessor Methods ********************** //
 
@@ -80,9 +88,9 @@ public class Patron {
         this.loans = loans;
     }
 
-    // ********************** Model Methods ********************** //
 
-    public void addLoan(Loan loan) { this.loans.add(loan); }
+
+    // ********************** Model Methods ********************** //
 
     @PrePersist
     void createdAt() {
@@ -96,8 +104,38 @@ public class Patron {
         this.loans.add(new Loan(copy,this));
     }
 
+    //public void addLoan(Loan loan) { this.loans.add(loan); }
+
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+        loan.setPatron(this);
+    }
+
+    public void removeLoan(Loan loan) {
+        loans.remove(loan);
+        loan.setPatron(null);
+    }
+
+
 
     // ********************** Common Methods ********************** //
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Patron patron = (Patron) o;
+        return uuid.equals(patron.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
+}
+
+
+/*
 
     @Override
     public boolean equals(Object obj) {
@@ -115,4 +153,4 @@ public class Patron {
     public int hashCode() {
         return Objects.hash(uuid);
     }
-}
+ */

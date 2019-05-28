@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.ltu.kaicalib.core.domain.CheckoutList;
 import se.ltu.kaicalib.core.domain.entities.Copy;
 import se.ltu.kaicalib.core.domain.entities.Loan;
@@ -66,12 +67,11 @@ public class LoanController {
 
 
     /* ====== COPY and TITLES ================================= */
-    // todo receive selected copy to add to checkout not a title.
 
     @GetMapping("/checkout_add_title")
     public String addCopyToCheckout(@RequestParam("id") Long titleId, Model model) {
-        Copy copy = loanService.getCopyForNewLoan(titleId);
-        checkoutList.addCopyId(copy.getId()); // todo business rules checks and feedback on failure
+        Copy copy = loanService.getCopyForNewLoan(titleId); // todo receive selected copy to add to checkout not a title.
+        checkoutList.addCopyId(copy.getId());               // todo business rules checks and feedback on failure
         String msg = messageSource.getMessage("Copy.addedToCheckout.success", toArr(titleId.toString()), null);
         model.addAttribute("success", msg);
 
@@ -94,8 +94,7 @@ public class LoanController {
 
     @GetMapping("/checkout_renew_loan")
     public String renewLoan(@RequestParam("id") Long id, Model model) {
-        Loan loan = loanService.renewLoan(id);
-        checkoutList.addLoanId(loan.getId()); // todo business rules checks and feedback on failure
+        checkoutList.addLoanId(id);                         // todo business rules checks and feedback on failure
         String msg = messageSource.getMessage("Loan.addedToCheckout.success", null, null);
         model.addAttribute("success", msg);
 
@@ -139,25 +138,30 @@ public class LoanController {
     @PostMapping("/checkout")
     public String proceedWithCheckout(
         @RequestParam(value = "usageTerms") Boolean usageTerms,
-        Model model) {
+        Model model,
+        RedirectAttributes redirectAttrs) {
 
         if (usageTerms) {
             // todo This is cutting corners.
             //  There should be a redirect on success and receipt and msg passed in Session.
             //  Another good usage of flashAttributes I think.
+            //
+            // Testing now how this all works with a different return quite simply.
             Patron patron = patronService.getPatronForAuthUser();
             Receipt receipt = checkoutService.checkOut(checkoutList, patron);
             String msg = messageSource.getMessage("CheckoutList.checkout.success", toArr(String.valueOf(receipt.gettotalLoanCount())), null);
             model.addAttribute("success", msg);
-            model.addAttribute("receipt", receipt);
-            // todo add flashAttribute for Receipt instead.
-            // todo Check briefly the method of forward instead of redirect.... not certain it's needed but make sure.
-            return "redirect:receipt"; //return "/core/receipt";
+            model.addAttribute("loans", receipt.getLoanlist());
+            model.addAttribute("renewedLoans", receipt.getRenewedLoanList());
+            //model.addAttribute("receipt", receipt);
+            //redirectAttrs.addFlashAttribute("receipt", receipt);
+
+            return "/core/view_receipt";//return "return:receipt";
         }
         String msg = messageSource.getMessage("CheckoutList.checkout.termsAndConditions", null, null);
         model.addAttribute("warn", msg);
 
-        return "redirect:checkout"; //todo change to core/view_checkout
+        return "core/view_checkout";
     }
 
 
@@ -166,6 +170,8 @@ public class LoanController {
         model.addAttribute("loans", receipt.getLoanlist());
         model.addAttribute("renewedLoans", receipt.getRenewedLoanList());
         // todo set up the template.
+
+        // todo Compile with H2 database for easy deploy on VPS.
         return "/core/view_receipt";
 
     }

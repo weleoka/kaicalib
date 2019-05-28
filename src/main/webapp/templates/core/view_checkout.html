@@ -9,6 +9,7 @@
 
 <div class="container">
     <div th:include="fragments/navbar :: navbar"></div>
+    <span th:if="${param.success}" th:text="@{${param.success}}" class="alert alert-warning"></span>
     <span th:if="${success}" th:text="@{${success}}" class="alert alert-success"></span>
 
     <div th:if="${not #lists.isEmpty(copies)}">

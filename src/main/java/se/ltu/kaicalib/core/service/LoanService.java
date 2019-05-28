@@ -69,7 +69,7 @@ public class LoanService {
 
     /**
      * Gets the relevant Loan object from db and then checks business rules
-     * to see if it can be renewed. If it can then it returns the Loan object.
+     * to see if it can be renewed. If it can then it extends the loan period.
      *
      * todo If failing criteria then return message/businessRuleViolationCode
      * todo It would be good to and have a way of marking historic loan objects - like setting as renewed/returned.
@@ -79,17 +79,13 @@ public class LoanService {
      * @param loanId
      * @return
      */
-    public Loan renewLoan(Long loanId) {
+    public Loan renewLoanByLoanId(Long loanId) {
         Loan loan = loanRepository.getOne(loanId);
         // if patron has no debt
-        // if loan has not been renewed too many times
+        // if loan has not been renewed too many times (could be done by the loan object?)
         // if copy is not reserved
         // if the current loan period is at least half-way through (stop instant renewals)
-        Loan renewedLoan = new Loan(loan);
-        loanRepository.delete(loan);
-        // The following save vs saveAndFlush can be important later. https://stackoverflow.com/a/43884321/3092830
-        //loanRepository.saveAndFlush(renewedLoan);
-        loanRepository.save(renewedLoan); // todo Test if this is available in time for re-populating view
+        loan.renewLoan();
 
         return loan;
     }
@@ -168,19 +164,36 @@ public class LoanService {
 
 
     /**
-     * Creates a new loan from copy and patron information
+     * Creates a new loan and adds it to the the patron
      *
-     * @param copy
+     * @param copyId
      * @param patron
      * @return
      */
-    public Loan createNewLoan(Copy copy, Patron patron) {
-        Loan loan = new Loan(copy, patron);
-        loanRepository.save(loan);
-        logger.debug("Created new Loan of {}", copy.getTitle());
+    public Loan createNewLoan(Long copyId, Patron patron) {
+        Copy copy = copyRepository.getOne(copyId);
+        Loan loan = new Loan(copy);
+        copy.setStatus("unavailable");
+        patron.addLoan(loan);
+        //loanRepository.save(loan); // Think its already triggered by dirty checking in patron
+        logger.debug("Created new Loan of copy id: {}", copyId);
 
         return loan;
     }
+
+
+
+}
+
+
+/*
+    public void oldRenewLoanMethod(Loan loan) {
+        Loan renewedLoan = new Loan(loan); // not using the create new loan object. Extend period for the old.
+        loanRepository.delete(loan);
+        // The following save vs saveAndFlush can be important later. https://stackoverflow.com/a/43884321/3092830
+        loanRepository.saveAndFlush(renewedLoan);
+        loanRepository.save();
+ */
 
 
     /**
@@ -191,12 +204,11 @@ public class LoanService {
      *
      * @param loan
      * @return
-     */
+     *//*
     public Loan renewLoan(Loan loan) {
         Loan renewedLoan = new Loan(loan);
         loanRepository.save(renewedLoan);
         logger.debug("Renewed Loan id:{}", loan.getId());
 
         return renewedLoan;
-    }
-}
+    }*/

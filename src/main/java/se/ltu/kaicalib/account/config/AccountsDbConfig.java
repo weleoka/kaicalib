@@ -13,6 +13,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import se.ltu.kaicalib.core.config.KaicalibYamlConfig;
 
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
@@ -28,15 +29,26 @@ import java.util.Map;
     basePackages = {"se.ltu.kaicalib.account"}
 )
 public class AccountsDbConfig {
+    private KaicalibYamlConfig.AccountJpaProperties accountJpaProperties;
+    private DataSource coreDateSource;
+
 
     @Autowired
-    private DataSource mainDataSource;
+    public AccountsDbConfig(
+        KaicalibYamlConfig.AccountJpaProperties accountJpaProperties,
+        DataSource coreDateSource
+    ) {
+        this.accountJpaProperties = accountJpaProperties;
+        this.coreDateSource = coreDateSource;
+    }
+
 
     @Bean(name="accountsDatasourceProperties")
     @ConfigurationProperties("accounts-datasource")
     public DataSourceProperties accountsDataSourceProperties() {
         return new DataSourceProperties();
     }
+
 
     @Bean(name = "accountsDataSource")
     @ConfigurationProperties("accounts-datasource.configuration")
@@ -49,8 +61,33 @@ public class AccountsDbConfig {
             return ds;
         }
 
-        return mainDataSource;
+        return coreDateSource;
     }
+
+
+    @Bean(name="accountsTransactionManager")
+    public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder) {
+        JpaTransactionManager tm = new JpaTransactionManager();
+        tm.setEntityManagerFactory(accountsEntityManagerFactory(builder).getObject());
+        tm.setDataSource(accountsDataSource());
+        return tm;
+    }
+
+
+    @Bean(name = "accountsEntityManagerFactory")
+    @PersistenceContext(unitName = "bibsys-account")
+    public LocalContainerEntityManagerFactoryBean accountsEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+        return builder
+            .dataSource(accountsDataSource())
+            .packages(new String[] {"se.ltu.kaicalib.account"})
+            .persistenceUnit("kaicalib-account")
+            .properties(accountJpaProperties.getJpaProperties())
+            .build();
+    }
+}
+
+
+
 
 /*
     @Bean(name = "accountsDataSource")
@@ -68,47 +105,6 @@ public class AccountsDbConfig {
         return txm;
     }
 */
-
-    @Bean(name="accountsTransactionManager")
-    public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder) {
-        JpaTransactionManager tm = new JpaTransactionManager();
-        tm.setEntityManagerFactory(accountsEntityManagerFactory(builder).getObject());
-        tm.setDataSource(accountsDataSource());
-        return tm;
-    }
-
-    /**
-     * These are here because when not autoconfiguring with Spring then the
-     * application.yml is not parsed for settings, only the actual datasource parameters are read.
-     *
-     * It's a big pickle due to parts of Spring not being up to date with YAML as of 20 May 2019.
-     *
-     * todo Move out to application.yml when time allows
-     *
-     * @return properties
-     */
-    //@ConfigurationProperties("accounts-datasource.configuration")
-    private Map<String, Object> jpaProperties() {
-        Map<String, Object> props = new HashMap<>();
-        // naming strategy to put underscores instead of camel case
-        // as per auto JPA Configuration
-        //props.put("hibernate.ejb.naming_strategy", new SpringNamingStrategy());
-        props.put("hibernate.hbm2ddl.auto", "update");
-        props.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        return props;
-    }
-
-    @Bean(name = "accountsEntityManagerFactory")
-    @PersistenceContext(unitName = "bibsys-account")
-    public LocalContainerEntityManagerFactoryBean accountsEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-        return builder
-            .dataSource(accountsDataSource())
-            .packages(new String[] {"se.ltu.kaicalib.account"})
-            .persistenceUnit("bibsys-account")
-            .properties(jpaProperties())
-            .build();
-    }
-}
 
 
 /*

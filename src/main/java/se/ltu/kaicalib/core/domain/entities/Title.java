@@ -20,8 +20,8 @@ public class Title {
     @Column(name = "title_id", updatable = false, nullable = false)
     private Long id;
 
-    @Type(type="uuid-char")
-    @Column(nullable=false, unique=true)
+    @Type(type="uuid-binary")
+    @Column(nullable=false, columnDefinition="BINARY(16)")
     final private UUID uuid = UUID.randomUUID();
 
     @Basic

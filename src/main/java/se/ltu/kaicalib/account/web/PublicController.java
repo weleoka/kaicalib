@@ -15,6 +15,11 @@ import se.ltu.kaicalib.account.domain.User;
 import se.ltu.kaicalib.account.service.UserServiceImpl;
 import se.ltu.kaicalib.account.utils.RoleNotValidException;
 import se.ltu.kaicalib.account.validator.UserValidator;
+import se.ltu.kaicalib.core.domain.TitleSearchFormCommand;
+import se.ltu.kaicalib.core.domain.entities.Copy;
+import se.ltu.kaicalib.core.domain.entities.Patron;
+import se.ltu.kaicalib.core.domain.entities.Title;
+import se.ltu.kaicalib.core.service.*;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -22,14 +27,29 @@ import java.util.Set;
 
 @Controller
 public class PublicController {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
     private UserServiceImpl userService;
+    private UserValidator userValidator;
+    // The following three are just wired for dev testing (auto-login routes)
+    private PatronService patronService;
+    private CopyService copyService;
+    private CheckoutService checkoutService;
+
 
     @Autowired
-    private UserValidator userValidator;
+    public PublicController(
+        UserServiceImpl userService,
+        UserValidator userValidator,
+        PatronService patronService,
+        CopyService copyService,
+        CheckoutService checkoutService
+    ) {
+        this.userService = userService;
+        this.userValidator = userValidator;
+        this.patronService = patronService;
+        this.copyService = copyService;
+        this.checkoutService = checkoutService;
+    }
 
 
 
@@ -44,6 +64,7 @@ public class PublicController {
         return "redirect:/admin/profile";
     }
 
+
     @GetMapping("/login/auto")
     public String autoLoginPatron() {
         Set<Role> roles = new HashSet<Role>();
@@ -51,6 +72,11 @@ public class PublicController {
 
         User user = new User("aaa", "bbb", roles);
         userService.login(user);
+        User loggedInUser = userService.getAuthUser();
+
+        Patron patron = patronService.getPatronForUser(loggedInUser);
+        checkoutService.checkOut(9L, patron);
+
         return "redirect:/patron/profile";
     }
 
@@ -80,9 +106,6 @@ public class PublicController {
 
 
 
-
-
-
     /* ==== SIGN UP ================================================= */
     @RequestMapping(value= {"/signup"}, method=RequestMethod.GET)
     public String signup(Model model) {
@@ -90,6 +113,7 @@ public class PublicController {
 
         return "account/public/signup";
     }
+
 
     // todo load the default user roles from application config
     // todo load strings from messages source and make locale sensitive.
@@ -119,7 +143,6 @@ public class PublicController {
             return "account/public/signup";
         }
     }
-
 
 
 

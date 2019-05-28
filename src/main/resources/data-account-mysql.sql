@@ -18,10 +18,13 @@ INSERT INTO user_roles (user_id, role_id) VALUES (1, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (3, 1);
 
--- H2 DB Syntax: ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 
-SET SQL_SAFE_UPDATES = 0;
-UPDATE `hibernate_sequence` SET `next_val` = 4;
-SET SQL_SAFE_UPDATES = 1;
+-- Depreciated with Mariadb 10.3 and sequences support
+-- SET SQL_SAFE_UPDATES = 0;
+-- UPDATE `hibernate_sequence` SET `next_val` = 4;
+-- SET SQL_SAFE_UPDATES = 1;
+
+-- MariaDB 10.3, H2 and HSQLDB sequences
+ALTER SEQUENCE hibernate_sequence RESTART WITH 4;
 
 SET FOREIGN_KEY_CHECKS=1;

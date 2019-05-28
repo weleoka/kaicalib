@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 /**
- * Facilitates easy retrieveal of copy objects for the use in
+ * Facilitates easy retrieval of copy objects for the use in
  * higher layers, mostly controllers.
  *
  *

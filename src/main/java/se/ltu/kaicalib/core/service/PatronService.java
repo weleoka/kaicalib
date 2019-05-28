@@ -35,11 +35,29 @@ public class PatronService {
     }
 
 
+    /**
+     * Convenience method to return a patron for the current auth user.
+     *
+     * @return
+     */
     @Transactional(value = "coreTransactionManager", readOnly = true)
     public Patron getPatronForAuthUser() {
         User user = userService.getAuthUser();
-        Patron patron = patronRepository.getPatronByUserUuid(user.getUuid());
 
-        return patron;
+        return patronRepository.getPatronByUserUuid(user.getUuid());
+    }
+
+
+    /**
+     * Standard way of retrieving a patron that belongs to a certain
+     * user.
+     *
+     * @param user
+     * @return
+     */
+    @Transactional(value = "coreTransactionManager", readOnly = true)
+    public Patron getPatronForUser(User user) {
+
+        return patronRepository.getPatronByUserUuid(user.getUuid());
     }
 }

@@ -46,27 +46,43 @@ public class CheckoutService {
      * todo Consider the pros and cons of Autowiring the checkoutList versus passing as argument to here.
      * todo As mentioned in LoanController this should not have to fetch objects from persistence again.
      *
+     * todo is it better to Fetch all copies and loans at once or fetch them individually within their
+     *  respective Service classes? Implemented but still needs testing and consideration again.
+     *
      * @param checkoutList
      */
-    @Transactional(value = "coreTransactionManager", readOnly = false)
     public Receipt checkOut(CheckoutList checkoutList, Patron patron) {
-        List<Copy> copies = copyService.getAllCopiesByIdList(checkoutList.getCopiesIds());
-        List<Loan> loans = loanService.getAllLoansByIdList(checkoutList.getLoansIds());
         Receipt receipt = new Receipt(patron);
 
-        for (Copy copy : copies) {
-            Loan createdLoan = loanService.createNewLoan(copy, patron);
+        for (Long copyId : checkoutList.getCopiesIds()) {
+            Loan createdLoan = loanService.createNewLoan(copyId, patron);
             receipt.addLoan(createdLoan);
+            checkoutList.removeCopyId(copyId);
         }
 
-        for (Loan loan : loans) {
-            Loan renewedLoan = loanService.renewLoan(loan);
+        for (Long loanId : checkoutList.getLoansIds()) {
+            Loan renewedLoan = loanService.renewLoanByLoanId(loanId);
             receipt.addRenewedLoan(renewedLoan);
+            checkoutList.removeLoanId(loanId);
         }
-        checkoutList.emptyCheckoutCopyIds();
-        checkoutList.emptyCheckoutLoanIds();
-
         logger.debug("Created {} loans for patron id: {}", receipt.gettotalLoanCount(), patron.getId());
+
+        return receipt;
+    }
+
+
+    /**
+     * Checks out a single copy for a patron.
+     *
+     * Mostly for testing purposes but may be useful.
+     *
+     * @param copyId
+     * @param patron
+     * @return
+     */
+    public Receipt checkOut(Long copyId, Patron patron) {
+        Receipt receipt = new Receipt(patron);
+        receipt.addLoan(loanService.createNewLoan(copyId, patron));
 
         return receipt;
     }

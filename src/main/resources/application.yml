@@ -28,6 +28,7 @@ spring:
         #include: datasource-h2
         include:
             - datasource-mysql
+            #- datasource-hsql
             #- datasource-h2
             - datasource-accounts-mysql
 
@@ -145,18 +146,25 @@ logging:
 
 # ===============================
 # = KAICALIB configurations for DEV
+#
+# The main place with connection configurations
+#
 # ===============================
 kaicalib:
     account:
         jpa:
-            ddl_auto: validate
-            dialect: org.hibernate.dialect.MySQL5Dialect
+            ddl_auto: update # create, create-drop, validate
+            #dialect: org.hibernate.dialect.MySQL5Dialect
+            dialect: org.hibernate.dialect.MariaDB103Dialect
+            storage_engine: innodb # innodb is default? #spring.jpa.properties.hibernate.dialect.storage_engine=innodb
         load_initial: false
 
     core:
         jpa:
-            ddl_auto: validate
-            dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+            ddl_auto: create
+            #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+            dialect: org.hibernate.dialect.MariaDB103Dialect
+            storage_engine: innodb
         load_initial: false
 
 
@@ -166,26 +174,20 @@ kaicalib:
 ---
 spring:
     profiles: datasource-hsql
-    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
-        # database-platform: MYSQL # Can be autodetected. Sets an ENUM for DB jpa type.
-        properties:
-            hibernate.dialect: org.hibernate.dialect.HSQLDialect
-        hibernate:
-            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
-            # validate if schema is made by schema.sql. create-drop is default with in-memory db.
+
 datasource:
     name: HSQL-datasource
     #shutdown=true can be used in the url to disable the database's automatic shutdown.
     #url: jdbc:hsqldb:file:./hsqldb_data/testdb
     url: jdbc:hsqldb:mem:kaicalib_db
-    platform: all # all is default for data.sql and schema.sql files for loading.
+    #platform: all # all is default for data.sql and schema.sql files for loading.
 
 
 ---
 spring:
     profiles: datasource-h2
 
-    h2:
+    h2: # Have to test if these are parsed
         console: # Allows http://localhost:8080/console as a dbms tool
             enabled: true
             path: /console  # default is /h2-console
@@ -216,30 +218,18 @@ datasource:
 ---
 spring:
     profiles: datasource-mysql
-    jpa: # WARNING Set these in DataSource Config files not here. JPA settings here are NOT parsed
-        properties:
-            hibernate.dialect: org.hibernate.dialect.MySQL5Dialect #org.hibernate.dialect.MySQL5InnoDBDialect:
-
-            #hibernate.default_schema: PUBLIC
-        hibernate:
-            ddl-auto: create-drop # WARNING Specified in core/config/CoreDbConfig.java and accounts/config/accountsDbConfig.java
-        #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # should work as well as through hibernate property
 
 datasource:
     username: kaicalib_db_user
     password: enter112
     name: MariaDB-datasource
-    url: jdbc:mysql://localhost:3306/kaicalib_db?useLegacyDatetimeCode=false&serverTimezone=UTC
-
+    url: jdbc:mysql://localhost:3306/kaicalib_db?useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
 
 
 
 ---
-# SECONDARY DATASOURCE using MARIADB / MYSQL
-# This separates the business and authentication domains at the persistence level.
-# todo Question: USE <database> be possible. One for accounts, one for domain but on the same SQL database server?
 spring:
-    profiles: datasource-accounts-mysql
+    profiles: datasource-accounts-mysql # For the accounts module
 
 accounts-datasource:
     username: kaicalib_db_user
