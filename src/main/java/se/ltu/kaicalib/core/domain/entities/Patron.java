@@ -34,7 +34,7 @@ public class Patron {
     @OneToMany(
         mappedBy = "patron",        // i.e. patron attribute in Loan
         fetch = FetchType.EAGER
-        //cascade = CascadeType.ALL // Nothing that happens to patron should affect their loans.
+        //cascade = CascadeType.ALL // todo If a patron is deleted all their loans are as well... good or bad.
     )
     //@JoinColumn(name = "patron_id")
     //@ManyToOne(fetch = FetchType.LAZY)

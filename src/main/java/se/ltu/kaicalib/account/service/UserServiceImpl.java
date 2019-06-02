@@ -98,25 +98,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    /**
-     * Login a user programmatically supplying the password, i.e. not from a form.
-     *
-     * Used for testing purposes.
-     *
-     * todo production check
-     *
-     * @param user
-     * @param password
-     */
-    public void login (User user, String password) {
-        user.setPassword(password);
-        login(user);
-    }
-
     private Authentication authenticate(User user) {
 
         return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), Collections.singleton(createAuthority(user)));
     }
+
 
     private GrantedAuthority createAuthority(User user) {
         Set<Role> roles = user.getRoles();

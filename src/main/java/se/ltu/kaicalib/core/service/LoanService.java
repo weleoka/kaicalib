@@ -54,16 +54,15 @@ public class LoanService {
     @Transactional(value = "coreTransactionManager", readOnly = true)
     public List<Loan> getAllLoansForPatron() {
         Patron patron = patronService.getPatronForAuthUser();
-        List<Loan> list = new ArrayList<>();
 
-        try {
-            list = patron.getLoans();
+        return loanRepository.findLoansByPatronId(patron);
 
-        } catch (NullPointerException e) {
-            logger.debug("Empty loan list: {}", e.toString());
+    /*    if (!tmpOpt.isEmpty()) {
+            List<Loan> loans = new ArrayList<>().addAll(tmpOpt);
+            return loans;
         }
 
-        return list;
+        return null;*/
     }
 
 
@@ -175,7 +174,7 @@ public class LoanService {
         Loan loan = new Loan(copy);
         copy.setStatus("unavailable");
         patron.addLoan(loan);
-        //loanRepository.save(loan); // Think its already triggered by dirty checking in patron
+        loanRepository.save(loan); // Think its already triggered by dirty checking in patron
         logger.debug("Created new Loan of copy id: {}", copyId);
 
         return loan;

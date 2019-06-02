@@ -36,7 +36,9 @@ public class Loan {
     private Copy copy;
 
     //@OneToOne(fetch = FetchType.EAGER, optional = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        optional = false)
     @JoinColumn(name = "patron_id")
     //@Column(name = "patron_id")
     private Patron patron;

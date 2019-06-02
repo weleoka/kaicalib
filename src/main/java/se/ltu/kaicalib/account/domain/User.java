@@ -15,7 +15,7 @@ import java.util.UUID;
  * todo Make UUID into BINARY(16) form for all UUID's.
  */
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @Data
 public class User {
 
@@ -26,7 +26,7 @@ public class User {
     //@Type(type="uuid-char")
     @Type(type="uuid-binary")
     @Column(nullable=false, columnDefinition="BINARY(16)")
-    final private UUID uuid = UUID.randomUUID();
+    private UUID uuid;  //= UUID.randomUUID()
 
     @Column
     private String email;
@@ -79,11 +79,12 @@ public class User {
     )
     private Set<Role> roles;
 
-    public User() {
 
+    public User() {
     }
 
-    // todo Remove for production. This is for autologon.
+
+    // todo production check. This is for autologon.
     public User(String username, String password, Set<Role> authorities) {
         this.username = username;
         this.password = password;
@@ -91,9 +92,7 @@ public class User {
     }
 
 
-
-
-    @Override
+    @Override // todo consider having this check the uuid instead... uncertain.
     public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof User)) return false;

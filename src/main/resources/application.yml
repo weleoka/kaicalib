@@ -128,12 +128,12 @@ logging:
         org.springframework.web: WARN
         org.springframework.security: WARN
         org.springframework.security.web: DEBUG
-        org.springframework.security.web.FilterChainProxy: DEBUG # FilterChainProxy
-        org.springframework.security.web.access.FilterSecurityInterceptor: DEBUG # FilterSecurityInterceptor
+        org.springframework.security.web.FilterChainProxy: WARN # FilterChainProxy
+        org.springframework.security.web.access.FilterSecurityInterceptor: WARN # FilterSecurityInterceptor
         org.springframework.security.web.util.matcher: WARN # OrRequestMatcher & AntRequestMatcher
         # org.springframework.security.web.util.matcher.AntRequestMatcher: WARN #
 
-        org.hibernate: WARN
+        org.hibernate: DEBUG
         com.datasources: DEBUG
     pattern:
         console: "%d{HH:mm:ss.SSS} %highlight(%-5level) [%-20.30logger{10}] - %msg%n"
@@ -153,11 +153,11 @@ logging:
 kaicalib:
     account:
         jpa:
-            ddl_auto: update # create, create-drop, validate
+            ddl_auto: create # create, create-drop, validate
             #dialect: org.hibernate.dialect.MySQL5Dialect
             dialect: org.hibernate.dialect.MariaDB103Dialect
             storage_engine: innodb # innodb is default? #spring.jpa.properties.hibernate.dialect.storage_engine=innodb
-        load_initial: false
+        load_initial: true
 
     core:
         jpa:
@@ -165,7 +165,7 @@ kaicalib:
             #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             dialect: org.hibernate.dialect.MariaDB103Dialect
             storage_engine: innodb
-        load_initial: false
+        load_initial: true
 
 
 
@@ -238,4 +238,3 @@ accounts-datasource:
     url: jdbc:mysql://localhost:3306/kaicalib_accounts_db?useLegacyDatetimeCode=false&serverTimezone=UTC
     #platform: account # data-account.sql and schema-account.sql for preloading
     initialization-mode: always
-
