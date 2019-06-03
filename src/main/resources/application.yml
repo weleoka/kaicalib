@@ -20,13 +20,14 @@ spring:
     # = PROFILES configurations
     # ===============================
     profiles:
-        active: dev
+        #active: dev
         #active: test
-        #active: prod
+        active: prod
         #include: datasource-mysql
         #include: datasource-hsql
         #include: datasource-h2
         include:
+            - basics
             - datasource-mysql
             #- datasource-hsql
             #- datasource-h2
@@ -34,7 +35,7 @@ spring:
 
 ---
 spring:
-    profiles: dev
+    profiles: basics
     application:
         name: kaicalib
 
@@ -44,7 +45,7 @@ spring:
     mvc:
         favicon.enabled: true
     main:
-        banner-mode: 'off' # quoted becase off maps to false in YML. Othe possible is CONSOLE or LOG.
+        banner-mode: 'off' # quoted because off maps to false in YML. Other possibles is CONSOLE or LOG.
         #allow-bean-definition-overriding: true
     output:
         ansi:
@@ -55,6 +56,13 @@ spring:
         use-code-as-default-message: true
         fallback-to-system-locale: true
 
+
+
+
+
+---
+spring:
+    profiles: dev
 
     # ===============================
     # = JPA configurations
@@ -68,11 +76,8 @@ spring:
         show-sql: true
         open-in-view: false # Recommended for production
 
-
-
-
         # ===============================
-        # = HIBERNATE configurations
+        # = HIBERNATE DEV configurations
         # ===============================
 
         properties:
@@ -92,32 +97,29 @@ spring:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
 
-
     # ===============================
-    # = DEVTOOLS configurations
+    # = DEVTOOLS DEV configurations
     # ===============================
     devtools:
         restart:
             enabled: true
-            exclude: static/**,templates/**
+            exclude: static/**,core/**,fragments/**,account/**
             # Excludes changes to webbapp files as they reload without a restart.
         livereload:
             enabled: true
         add-properties: false
 
-
-
     # ===============================
-    # = THYMELEAF configurations
+    # = THYMELEAF DEV configurations
     # ===============================
     thymeleaf:
-        prefix: file:./src/main/webapp/templates/
+        prefix: file:./src/main/webapp/
         suffix: .html
         mode: HTML
         cache: false
 
 # ===============================
-# = Logging configurations for DEV
+# = LOGGING DEV configurations
 # ===============================
 # Logging groups can be created for switching batches of loggers.
 # https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html#boot-features-custom-log-groups
@@ -127,7 +129,7 @@ logging:
         root: INFO
         org.springframework.web: WARN
         org.springframework.security: WARN
-        org.springframework.security.web: DEBUG
+        org.springframework.security.web: DeBUG
         org.springframework.security.web.FilterChainProxy: WARN # FilterChainProxy
         org.springframework.security.web.access.FilterSecurityInterceptor: WARN # FilterSecurityInterceptor
         org.springframework.security.web.util.matcher: WARN # OrRequestMatcher & AntRequestMatcher
@@ -141,8 +143,6 @@ logging:
         #console: "%-5level %logger : %msg%n"
         #console: "%d %-5level %logger : %msg%n"
         #file: "%d %-5level [%thread] %logger : %msg%n"
-
-
 
 # ===============================
 # = KAICALIB configurations for DEV
@@ -166,6 +166,77 @@ kaicalib:
             dialect: org.hibernate.dialect.MariaDB103Dialect
             storage_engine: innodb
         load_initial: true
+
+
+
+
+
+
+---
+spring:
+    profiles: prod
+
+    jpa:
+        show-sql: false
+        open-in-view: false
+
+
+
+    # ===============================
+    # = THYMELEAF PROD configurations
+    # ===============================
+    thymeleaf:
+        prefix: file:./src/main/webapp/
+        suffix: .html
+        mode: HTML
+        cache: true
+
+
+
+# ===============================
+# = Logging configurations for PROD
+# ===============================
+# Logging groups can be created for switching batches of loggers.
+# https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html#boot-features-custom-log-groups
+logging:
+    file: /var/log/kaicalib.log
+    level:
+        root: INFO
+
+    pattern:
+        console: "%d{HH:mm:ss.SSS} %highlight(%-5level) [%-20.30logger{10}] - %msg%n"
+
+# ===============================
+# = KAICALIB configurations for PROD
+# Persistence connection configurations
+# ===============================
+kaicalib:
+    account:
+        jpa:
+            ddl_auto: create # create, create-drop, validate
+            #dialect: org.hibernate.dialect.MySQL5Dialect
+            dialect: org.hibernate.dialect.MariaDB103Dialect
+            storage_engine: innodb # innodb is default? #spring.jpa.properties.hibernate.dialect.storage_engine=innodb
+        load_initial: true
+
+    core:
+        jpa:
+            ddl_auto: create
+            #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+            dialect: org.hibernate.dialect.MariaDB103Dialect
+            storage_engine: innodb
+        load_initial: true
+
+
+
+
+
+
+
+
+
+
+
 
 
 

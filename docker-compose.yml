@@ -1,4 +1,8 @@
 # Docker compose yml config
+# Note this dependes on the PWD context so make sure you run from the right relative path
+# to the repository. If not there will be empty directories created in the docker containers instead of files...
+# to name just one problem. So run docker compose while in the same directory as this file.
+
 version: '3.7'
 #version: "3.5"
 
@@ -25,6 +29,6 @@ services:
         ports:
             - "8080:8080"
         volumes:
-            - ${PWD}/build/libs/kaicalib-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/kaicalib-0.0.1-SNAPSHOT.war
+            - ${PWD}/build/libs/kaicalib-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/kaicalib.war
         depends_on:
             - mariadb

@@ -23,6 +23,9 @@ public class FilmType extends TitleType{
     @Column(name = "actor_name")
     private List<String> actors;
 
+    public FilmType() {
+    }
+
     /**
      * Constructor.
      *

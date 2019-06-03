@@ -23,6 +23,9 @@ public class BookType extends TitleType{
     @OneToMany
     private List<Author> authors;
 
+    public BookType() {
+    }
+
     /**
      * Constructor for multiple authors.
      *

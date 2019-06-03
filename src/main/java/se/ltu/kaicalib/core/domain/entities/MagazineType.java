@@ -18,7 +18,8 @@ public class MagazineType extends TitleType{
     @OneToOne
     private Publisher publisher;
 
-
+    public MagazineType() {
+    }
 
     /**
      * Constructor.
