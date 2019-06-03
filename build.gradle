@@ -1,6 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.5.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id 'java'
+    id 'war'
+    //id 'org.gretty' version '2.3.1'
+    //id 'application'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -8,34 +11,36 @@ apply plugin: 'io.spring.dependency-management'
 group = 'se.ltu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.11'
+//mainClassName = 'se.ltu.kaicalib.KaicalibApplication'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
+
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	//implementation 'org.springframework.boot:spring-boot-starter-mail'
-	//implementation 'org.springframework.boot:spring-boot-starter-quartz'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	//runtimeOnly 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    //implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    //runtimeOnly 'com.h2database:h2'
     //compile 'com.h2database:h2' // Compile so usage of h2/console is possible
-	runtimeOnly 'mysql:mysql-connector-java'
-	//runtimeOnly 'org.hsqldb:hsqldb'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'mysql:mysql-connector-java'
+    //runtimeOnly 'org.hsqldb:hsqldb'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.4.RELEASE'
