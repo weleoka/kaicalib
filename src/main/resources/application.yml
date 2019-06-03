@@ -199,7 +199,7 @@ spring:
 # Logging groups can be created for switching batches of loggers.
 # https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html#boot-features-custom-log-groups
 logging:
-    file: /var/log/kaicalib.log
+    file: log/kaicalib.log
     level:
         root: INFO
 

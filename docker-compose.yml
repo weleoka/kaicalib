@@ -30,5 +30,6 @@ services:
             - "8080:8080"
         volumes:
             - ${PWD}/build/libs/kaicalib-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/kaicalib.war
+            - ${PWD}/log/kaicalib.log:/usr/local/tomcat/webapps/kaicalib/webapps/kaicalib/log/kaicalib.log
         depends_on:
             - mariadb

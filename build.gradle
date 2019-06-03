@@ -46,8 +46,8 @@ dependencies {
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.4.RELEASE'
 
     
-    // Maybe recommended for WAR deployment.
-    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // Needed for WAR deployment. Spring build tools would take care of this though.
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     
     
     // sql connection drivers
