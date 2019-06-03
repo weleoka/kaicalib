@@ -144,11 +144,10 @@ public class LoanController {
         if (usageTerms) {
             // todo This is cutting corners.
             //  There should be a redirect on success and receipt and msg passed in Session.
-            //  Another good usage of flashAttributes I think.
+            //  Another good usage of flashAttributes.
             //
             // Testing now how this all works with a different return quite simply.
-            Patron patron = patronService.getPatronForAuthUser();
-            Receipt receipt = checkoutService.checkOut(checkoutList, patron);
+            Receipt receipt = checkoutService.checkOut(checkoutList, patronService.getPatronForAuthUser());
             String msg = messageSource.getMessage("CheckoutList.checkout.success", toArr(String.valueOf(receipt.gettotalLoanCount())), null);
             model.addAttribute("success", msg);
             model.addAttribute("loans", receipt.getLoanlist());

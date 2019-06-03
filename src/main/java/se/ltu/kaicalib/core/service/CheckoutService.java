@@ -11,6 +11,8 @@ import se.ltu.kaicalib.core.domain.entities.Loan;
 import se.ltu.kaicalib.core.domain.entities.Patron;
 import se.ltu.kaicalib.core.domain.entities.Receipt;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -43,6 +45,11 @@ public class CheckoutService {
      * Processes the CheckoutList object and creates
      * new loans on copies, or renews old loans accordingly.
      *
+     * This method will empty the checkout list of all the items which were checked out.
+     *
+     * todo Should any secondary verifying be done here before the final renewal and creation of loans? If
+     *  so there's the beginning of the implementation to not remove all items from checkout by default.
+     *
      * todo Consider the pros and cons of Autowiring the checkoutList versus passing as argument to here.
      * todo As mentioned in LoanController this should not have to fetch objects from persistence again.
      *
@@ -53,18 +60,25 @@ public class CheckoutService {
      */
     public Receipt checkOut(CheckoutList checkoutList, Patron patron) {
         Receipt receipt = new Receipt(patron);
+        //List<Long> successCopiesLoaned = new LinkedList<>(); // Linked list because local
+        //List<Long> successLoansRenewed = new LinkedList<>(); // Linked list because local
 
         for (Long copyId : checkoutList.getCopiesIds()) {
             Loan createdLoan = loanService.createNewLoan(copyId, patron);
             receipt.addLoan(createdLoan);
-            checkoutList.removeCopyId(copyId);
+            //successCopiesLoaned.add(copyId);
         }
 
         for (Long loanId : checkoutList.getLoansIds()) {
             Loan renewedLoan = loanService.renewLoanByLoanId(loanId);
             receipt.addRenewedLoan(renewedLoan);
-            checkoutList.removeLoanId(loanId);
+            //successLoansRenewed.add(loanId);
         }
+
+        //checkout.copiesList.removeAll(successCopiesLoaned))
+        //checkout.laonsList.removeAll(successLoansRenewed))
+        checkoutList.emptyCheckoutCopyIds(); // Currently emptying by default
+        checkoutList.emptyCheckoutLoanIds();
         logger.debug("Created {} loans for patron id: {}", receipt.gettotalLoanCount(), patron.getId());
 
         return receipt;
